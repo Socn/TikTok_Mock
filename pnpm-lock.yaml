@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@douyinfe/semi-icons':
+        specifier: ^2.88.3
+        version: 2.88.3(react@18.3.1)
       '@douyinfe/semi-ui':
         specifier: ^2.88.3
         version: 2.88.3(@floating-ui/dom@1.7.4)(@tiptap/suggestion@3.11.0(@tiptap/core@3.11.0(@tiptap/pm@3.11.0))(@tiptap/pm@3.11.0))(@types/react-dom@18.3.7(@types/react@18.3.27))(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -42,6 +45,9 @@ importers:
       '@modern-js/tsconfig':
         specifier: 2.68.20
         version: 2.68.20
+      '@rsbuild/plugin-svgr':
+        specifier: ^1.2.2
+        version: 1.2.2(@rsbuild/core@1.6.3)(typescript@5.7.3)
       '@types/jest':
         specifier: ~29.2.4
         version: 29.2.6
