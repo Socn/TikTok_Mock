@@ -14,6 +14,7 @@ import {
   useState,
 } from 'react';
 
+import useCollapsed from '@/hooks/useCollpased';
 import styles from './index.module.scss';
 
 const TikTokLogo = ({ collapsed }: { collapsed: boolean }) => {
@@ -132,15 +133,8 @@ export default function Sidebar() {
     }
     return 'Featured';
   });
-  const [collapsed, setCollapsed] = useState(() => {
-    return window.matchMedia('(min-width: 768px)').matches === false;
-  });
 
-  useEffect(() => {
-    const handler = (e: MediaQueryListEvent) =>
-      setCollapsed(e.matches === false);
-    window.matchMedia('(min-width: 768px)').addEventListener('change', handler);
-  }, []);
+  const collapsed = useCollapsed();
 
   const sidebarWidth = collapsed ? 72 : 160;
 
