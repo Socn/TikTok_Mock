@@ -1,5 +1,10 @@
 import { themeAtom } from '@/routes/layout';
-import { IconStarStroked, IconThumbUpStroked } from '@douyinfe/semi-icons';
+import {
+  IconLikeThumb,
+  IconStar,
+  IconStarStroked,
+  IconThumbUpStroked,
+} from '@douyinfe/semi-icons';
 import { List } from '@douyinfe/semi-ui';
 import { useAtom } from 'jotai';
 
@@ -43,53 +48,39 @@ const TikTokLogo = ({ collapsed }: { collapsed: boolean }) => {
 };
 
 const sidebarItem = (
-  item: { itemKey: string; text: string; icon: ReactElement; nav: string },
+  item: {
+    itemKey: string;
+    text: string;
+    icon: ReactElement;
+    selectedIcon: ReactElement;
+    nav: string;
+  },
   collapsed: boolean,
   selectedKey: string,
   onClick: () => void,
 ) => {
-  if (collapsed === true) {
-    return (
-      <List.Item
-        key={item.itemKey}
-        className={styles.sidenavItemCollapsed}
-        onClick={onClick}
-        style={
-          item.itemKey === selectedKey
-            ? {
-                color: 'var(--semi-color-text-0)',
-                backgroundColor: 'var(--semi-color-bg-2)',
-              }
-            : {
-                color: 'var(--semi-color-text-1)',
-              }
-        }
-      >
-        <p className={styles.sidenavItemContent}>
-          {item.icon}
-          <span>{item.text}</span>
-        </p>
-      </List.Item>
-    );
-  }
+  const selected = item.itemKey === selectedKey;
+  const displayIcon = selected ? item.selectedIcon : item.icon;
+  const style = selected
+    ? {
+        color: 'var(--semi-color-text-0)',
+        backgroundColor: 'var(--semi-color-bg-2)',
+      }
+    : {
+        color: 'var(--semi-color-text-1)',
+      };
+  const className = collapsed
+    ? styles.sidenavItemCollapsed
+    : styles.sidenavItem;
   return (
     <List.Item
       key={item.itemKey}
-      className={styles.sidenavItem}
+      className={className}
       onClick={onClick}
-      style={
-        item.itemKey === selectedKey
-          ? {
-              color: 'var(--semi-color-text-0)',
-              backgroundColor: 'var(--semi-color-bg-2)',
-            }
-          : {
-              color: 'var(--semi-color-text-1)',
-            }
-      }
+      style={style}
     >
       <p className={styles.sidenavItemContent}>
-        {item.icon}
+        {displayIcon}
         <span>{item.text}</span>
       </p>
     </List.Item>
@@ -113,12 +104,14 @@ export default function Sidebar() {
         itemKey: 'Featured',
         text: '精选',
         icon: <IconThumbUpStroked size="large" style={itemStyle} />,
+        selectedIcon: <IconLikeThumb size="large" style={itemStyle} />,
         nav: '/jingxuan',
       },
       {
         itemKey: 'Recommend',
         text: '推荐',
         icon: <IconStarStroked size="large" style={itemStyle} />,
+        selectedIcon: <IconStar size="large" style={itemStyle} />,
         nav: '/?recommend=1',
       },
     ],
