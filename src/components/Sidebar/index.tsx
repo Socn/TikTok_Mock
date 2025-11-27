@@ -1,9 +1,22 @@
 import { themeAtom } from '@/routes/layout';
 import {
+  IconArticle,
+  IconCamera,
+  IconCameraStroked,
+  IconGridView,
+  IconHelpCircleStroked,
   IconLikeThumb,
+  IconSetting,
   IconStar,
   IconStarStroked,
   IconThumbUpStroked,
+  IconTiktokLogo,
+  IconUser,
+  IconUserAdd,
+  IconUserCardVideo,
+  IconUserCardVideoStroked,
+  IconUserGroup,
+  IconVideo,
 } from '@douyinfe/semi-icons';
 import { List } from '@douyinfe/semi-ui';
 import { useAtom } from 'jotai';
@@ -69,13 +82,24 @@ const sidebarItem = (
     : {
         color: 'var(--semi-color-text-1)',
       };
-  const className = collapsed
-    ? styles.sidenavItemCollapsed
-    : styles.sidenavItem;
+  if (item.itemKey.slice(0, 9) === 'separator') {
+    if (
+      item.itemKey.slice(item.itemKey.length - 11, item.itemKey.length) ===
+        'uncollapsed' &&
+      collapsed === true // 仅在未折叠时显示分割线
+    ) {
+      return <></>;
+    }
+    return <div key={item.itemKey} className={styles.separator} />;
+  }
+  if (item.itemKey === 'separator2') {
+  }
+  if (item.itemKey === 'separator1') {
+  }
   return (
     <List.Item
       key={item.itemKey}
-      className={className}
+      className={styles.sidenavItem}
       onClick={onClick}
       style={style}
     >
@@ -87,12 +111,13 @@ const sidebarItem = (
   );
 };
 
-export default function Sidebar() {
-  const [theme, setTheme] = useAtom(themeAtom);
-
+const SidebarNav = ({
+  collapsed,
+  sidebarWidth,
+}: { collapsed: boolean; sidebarWidth: number }) => {
   const navigate = useNavigate();
-  const collapsed = useCollapsed();
 
+  const sidenavClassname = collapsed ? styles.sidenavCollapsed : styles.sidenav;
   const itemStyle = collapsed
     ? {
         width: '24px',
@@ -122,6 +147,69 @@ export default function Sidebar() {
         selectedIcon: <IconStar size="large" style={itemStyle} />,
         nav: '/?recommend=1',
       },
+      {
+        itemKey: 'AITikTok',
+        text: 'AI抖音',
+        icon: <IconTiktokLogo size="large" style={itemStyle} />,
+        selectedIcon: <IconTiktokLogo size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
+      {
+        itemKey: 'separator1_uncollapsed',
+        text: '',
+        icon: <></>,
+        selectedIcon: <></>,
+        nav: '',
+      },
+      {
+        itemKey: 'Following',
+        text: '关注',
+        icon: <IconUserAdd size="large" style={itemStyle} />,
+        selectedIcon: <IconUserAdd size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
+      {
+        itemKey: 'Friends',
+        text: '朋友',
+        icon: <IconUserGroup size="large" style={itemStyle} />,
+        selectedIcon: <IconUserGroup size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
+      {
+        itemKey: 'Mine',
+        text: '我的',
+        icon: <IconUser size="large" style={itemStyle} />,
+        selectedIcon: <IconUser size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
+      {
+        itemKey: 'separator2',
+        text: '',
+        icon: <></>,
+        selectedIcon: <></>,
+        nav: '',
+      },
+      {
+        itemKey: 'Stream',
+        text: '直播',
+        icon: <IconVideo size="large" style={itemStyle} />,
+        selectedIcon: <IconVideo size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
+      {
+        itemKey: 'Cinema',
+        text: '放映厅',
+        icon: <IconUserCardVideoStroked size="large" style={itemStyle} />,
+        selectedIcon: <IconUserCardVideo size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
+      {
+        itemKey: 'ShortVideo',
+        text: '短剧',
+        icon: <IconCameraStroked size="large" style={itemStyle} />,
+        selectedIcon: <IconCamera size="large" style={itemStyle} />,
+        nav: '/?recommend=1',
+      },
     ],
     [itemStyle],
   );
@@ -135,9 +223,86 @@ export default function Sidebar() {
     return 'Featured';
   });
 
-  const sidebarWidth = collapsed ? 72 : 160;
+  return (
+    <div
+      style={{
+        width: `${sidebarWidth}px`,
+        marginTop: '56px',
+      }}
+    >
+      <List
+        className={sidenavClassname}
+        dataSource={items}
+        renderItem={item =>
+          sidebarItem(item, collapsed, selectedKey, () => {
+            navigate(item.nav);
+            setSelectedKey(item.itemKey);
+          })
+        }
+      />
+    </div>
+  );
+};
 
-  const sidenavClassname = collapsed ? styles.sidenavCollapsed : styles.sidenav;
+const SidebarMenu = ({
+  collapsed,
+  sidebarWidth,
+}: { collapsed: boolean; sidebarWidth: number }) => {
+  const items = [
+    {
+      itemKey: 'Settings',
+      icon: <IconSetting size="inherit" />,
+    },
+    {
+      itemKey: 'More',
+      icon: <IconGridView size="inherit" />,
+    },
+    {
+      itemKey: 'Help',
+      icon: <IconHelpCircleStroked size="inherit" />,
+    },
+    {
+      itemKey: 'Quiz',
+      icon: <IconArticle size="inherit" />,
+    },
+  ];
+
+  const sidemenuClassname = collapsed
+    ? styles.sidemenuCollapsed
+    : styles.sidemenu;
+
+  return (
+    <div
+      style={{
+        width: `${sidebarWidth}px`,
+      }}
+    >
+      <List
+        className={sidemenuClassname}
+        dataSource={items}
+        layout={collapsed ? 'vertical' : 'horizontal'}
+        renderItem={item => (
+          <List.Item
+            key={item.itemKey}
+            className={styles.sidemenuItem}
+            style={{
+              color: 'var(--semi-color-text-1)',
+            }}
+          >
+            {item.icon}
+          </List.Item>
+        )}
+      />
+    </div>
+  );
+};
+
+export default function Sidebar() {
+  const [theme, setTheme] = useAtom(themeAtom);
+
+  const collapsed = useCollapsed();
+
+  const sidebarWidth = collapsed ? 72 : 160;
 
   return (
     <>
@@ -153,21 +318,14 @@ export default function Sidebar() {
       </div>
       <div
         style={{
-          width: `${sidebarWidth}px`,
-          marginTop: '56px',
-          height: 'calc(100vh - 56px - 60px)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: '100%',
         }}
       >
-        <List
-          className={sidenavClassname}
-          dataSource={items}
-          renderItem={item =>
-            sidebarItem(item, collapsed, selectedKey, () => {
-              navigate(item.nav);
-              setSelectedKey(item.itemKey);
-            })
-          }
-        />
+        <SidebarNav collapsed={collapsed} sidebarWidth={sidebarWidth} />
+        <SidebarMenu collapsed={collapsed} sidebarWidth={sidebarWidth} />
       </div>
     </>
   );
