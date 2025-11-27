@@ -1,0 +1,16 @@
+.headerBar{
+  height: 56px;
+  color: var(--semi-color-text-0);
+  position:relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 16px;
+
+  // .searchTextbox{
+  //   position: absolute;
+  //   right: 400px;
+  //   width: calc((50vw - 40px) * 0.66);
+  //   left: auto;
+  // }
+}

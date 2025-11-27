@@ -1,7 +1,15 @@
+import useCollapsed from '@/hooks/useCollpased';
+import styles from './index.module.scss';
+
+import SearchTextbox from '@/components/SearchTextbox';
+import { HeaderMenu } from '../HeaderMenu';
+
 export default function TikTokHeader() {
+  const collapsed = useCollapsed();
   return (
-    <div style={{ backgroundColor: 'var(--semi-color-bg-1)' }}>
-      TikTok Header
+    <div className={styles.headerBar}>
+      <SearchTextbox className={styles.searchTextbox} />
+      <HeaderMenu />
     </div>
   );
 }
