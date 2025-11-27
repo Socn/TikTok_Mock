@@ -81,7 +81,7 @@ const sidebarItem = (
     >
       <p className={styles.sidenavItemContent}>
         {displayIcon}
-        <span>{item.text}</span>
+        <span className={styles.sidenavItemText}>{item.text}</span>
       </p>
     </List.Item>
   );
@@ -91,13 +91,21 @@ export default function Sidebar() {
   const [theme, setTheme] = useAtom(themeAtom);
 
   const navigate = useNavigate();
+  const collapsed = useCollapsed();
 
-  const itemStyle = {
-    width: '24px',
-    height: '24px',
-    fontSize: '22px',
-    padding: '1px',
-  };
+  const itemStyle = collapsed
+    ? {
+        width: '24px',
+        height: '24px',
+        fontSize: '22px',
+        padding: '0px 1px 1px 1px',
+      }
+    : {
+        width: '24px',
+        height: '24px',
+        fontSize: '22px',
+        padding: '1px',
+      };
   const items = useMemo(
     () => [
       {
@@ -115,7 +123,7 @@ export default function Sidebar() {
         nav: '/?recommend=1',
       },
     ],
-    [],
+    [itemStyle],
   );
 
   const [selectedKey, setSelectedKey] = useState<string>(() => {
@@ -127,9 +135,9 @@ export default function Sidebar() {
     return 'Featured';
   });
 
-  const collapsed = useCollapsed();
-
   const sidebarWidth = collapsed ? 72 : 160;
+
+  const sidenavClassname = collapsed ? styles.sidenavCollapsed : styles.sidenav;
 
   return (
     <>
@@ -151,6 +159,7 @@ export default function Sidebar() {
         }}
       >
         <List
+          className={sidenavClassname}
           dataSource={items}
           renderItem={item =>
             sidebarItem(item, collapsed, selectedKey, () => {
