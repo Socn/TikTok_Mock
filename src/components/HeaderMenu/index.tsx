@@ -1,7 +1,10 @@
+import useCollapsed from '@/hooks/useCollpased';
 import {
   IconBell,
-  IconCommentStroked,
+  IconComment,
   IconDesktop,
+  IconDownload,
+  IconGift,
   IconMore,
   IconUpload,
 } from '@douyinfe/semi-icons';
@@ -21,11 +24,17 @@ const MenuItem = ({
 };
 
 export function HeaderMenu() {
-  const items = [
+  const collapsed = useCollapsed(1030);
+  const allItems = [
     {
-      key: 'more',
-      text: '更多',
-      icon: <IconMore />,
+      key: 'pay',
+      text: '充钻石',
+      icon: <IconGift />,
+    },
+    {
+      key: 'client',
+      text: '客户端',
+      icon: <IconDownload />,
     },
     {
       key: 'wallpaper',
@@ -40,7 +49,7 @@ export function HeaderMenu() {
     {
       key: 'message',
       text: '私信',
-      icon: <IconCommentStroked />,
+      icon: <IconComment />,
     },
     {
       key: 'upload',
@@ -48,6 +57,16 @@ export function HeaderMenu() {
       icon: <IconUpload />,
     },
   ];
+  const items = collapsed
+    ? [
+        {
+          key: 'more',
+          text: '更多',
+          icon: <IconMore />,
+        },
+        ...allItems.slice(allItems.length - 4, allItems.length),
+      ]
+    : allItems;
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <List
