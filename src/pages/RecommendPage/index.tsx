@@ -3,12 +3,17 @@ import XGPlayer from '@/components/XGPlayer';
 import type { AwemeResponse } from '@/types/feedList';
 import { useEffect, useRef, useState } from 'react';
 
-import { Mousewheel, Navigation } from 'swiper/modules';
+import { Keyboard, Mousewheel, Navigation } from 'swiper/modules';
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/mousewheel';
 import 'swiper/css/navigation';
-import { IconArrowDown, IconArrowUp } from '@douyinfe/semi-icons';
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconChevronDown,
+  IconChevronUp,
+} from '@douyinfe/semi-icons';
 import { Button } from '@douyinfe/semi-ui';
 import { atom, useAtom } from 'jotai';
 
@@ -25,6 +30,7 @@ export default function RecommendPage() {
   const [fullscreen, setFullscreen] = useAtom(fullScreenAtom);
   const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     // Simulate fetching data
     async function f() {
@@ -50,19 +56,19 @@ export default function RecommendPage() {
             className={`${styles.swiperNavigationButton} swiper-navigation-up`}
             onClick={() => swiperRef.current?.swiper.slidePrev()}
           >
-            <IconArrowUp />
+            <IconChevronUp size="large" />
           </Button>
           <Button
             theme="borderless"
             className={`${styles.swiperNavigationButton} swiper-navigation-down`}
             onClick={() => swiperRef.current?.swiper.slideNext()}
           >
-            <IconArrowDown />
+            <IconChevronDown size="large" />
           </Button>
         </div>
       </div>
       <Swiper
-        modules={[Mousewheel, Navigation]}
+        modules={[Mousewheel, Navigation, Keyboard]}
         ref={swiperRef}
         navigation={{
           enabled: true,
@@ -76,6 +82,7 @@ export default function RecommendPage() {
         mousewheel={{
           enabled: true,
         }}
+        keyboard={{ enabled: true }}
         noSwipingSelector="xg-center-grid"
       >
         {feedData?.aweme_list.map(item => {

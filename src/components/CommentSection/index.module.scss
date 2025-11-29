@@ -4,6 +4,10 @@
   margin-top: 9px;
   position: relative;
 
+  &:nth-child(1){
+    margin-top: 0;
+  }
+
   .commentAvatarWrapper{
     box-sizing: content-box;
     min-width: fit-content;
@@ -20,6 +24,7 @@
   }
   .commentContentWrapper{
     padding: 4px 0;
+    width: 100%;
     .commentContent{
       .commentUsername{
         color: var(--semi-color-text-1);

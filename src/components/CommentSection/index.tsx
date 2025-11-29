@@ -4,21 +4,21 @@ import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
 
 import { sendComments } from '@/apis/sendComments';
-import BrokenHeart from '@/assets/icons/brokenHeart.svg?react';
+import AtSVG from '@/assets/icons/at.svg?react';
+import BrokenHeartSVG from '@/assets/icons/brokenHeart.svg?react';
+import BrokenHeartStrokedSVG from '@/assets/icons/brokenHeartStroked.svg?react';
+import EmojiStrokedSVG from '@/assets/icons/emojiStroked.svg?react';
+import HeartSVG from '@/assets/icons/heart.svg?react';
+import HeartStrokedSVG from '@/assets/icons/heartStroked.svg?react';
+import InfoCirCleStrokedSVG from '@/assets/icons/infoCircleStroked.svg?react';
+import PictureStrokedSVG from '@/assets/icons/pictureStroked.svg?react';
+import ReplyStrokedSVG from '@/assets/icons/replyStroked.svg?react';
+import ShareStrokedSVG from '@/assets/icons/shareStroked.svg?react';
 import {
   IconArrowUp,
-  IconAt,
   IconChevronDownStroked,
-  IconDislikeThumb,
-  IconEmoji,
-  IconHeartStroked,
-  IconImage,
-  IconImageStroked,
-  IconLikeHeart,
-  IconMore,
+  IconInfoCircle,
   IconMoreStroked,
-  IconReplyStroked,
-  IconShareStroked,
 } from '@douyinfe/semi-icons';
 import { Button, Dropdown, Input, Toast } from '@douyinfe/semi-ui';
 import copy from 'copy-to-clipboard';
@@ -30,7 +30,7 @@ const CommentActionItem = ({
   icon,
   text,
   onClick,
-}: { icon: ReactElement; text: string; onClick?: () => void }) => {
+}: { icon: ReactElement; text?: string; onClick?: () => void }) => {
   return (
     <button
       className={styles.commentActionItem}
@@ -120,6 +120,7 @@ function CommentCard({
   secondaryComments,
 }: { comment: CommentItem; secondaryComments?: CommentItem[] }) {
   const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
   const dropdownRef = React.useRef<Dropdown | null>(null);
   const commentContentRef = React.useRef<HTMLSpanElement | null>(null);
   const [visible, setVisible] = useState(false);
@@ -178,28 +179,69 @@ function CommentCard({
             </div>
           </Dropdown>
           <div className={styles.commentUsername}>{comment.nickname}</div>
-          <div className={styles.commentText}>
-            <span ref={commentContentRef}>{comment.content}</span>
-          </div>
-          <div className={styles.commentInfo}>
-            <span className={styles.commentTime}>
-              {new Date(comment.create_time * 1000).toLocaleDateString()}
-            </span>
-            ·
-            <span className={styles.commentIPLocation}>
-              {comment.ip_location}
-            </span>
-          </div>
+          {disliked ? (
+            <div
+              style={{
+                fontSize: '12px',
+                lineHeight: '20px',
+                margin: '0 0 5px 4px',
+                color: 'var(--semi-color-text-3)',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <IconWrapper
+                icon={<InfoCirCleStrokedSVG />}
+                style={{
+                  marginRight: '2px',
+                  opacity: 0.6,
+                }}
+              />
+              该评论被折叠
+            </div>
+          ) : (
+            <>
+              <div className={styles.commentText}>
+                <span ref={commentContentRef}>{comment.content}</span>
+              </div>
+              <div className={styles.commentInfo}>
+                <span className={styles.commentTime}>
+                  {new Date(comment.create_time * 1000).toLocaleDateString()}
+                </span>
+                ·
+                <span className={styles.commentIPLocation}>
+                  {comment.ip_location}
+                </span>
+              </div>
+            </>
+          )}
+
           <div className={styles.commentActionsWrapper}>
-            <div className={styles.commentActions}>
-              <CommentActionItem icon={<IconReplyStroked />} text="回复" />
-              <CommentActionItem icon={<IconShareStroked />} text="分享" />
+            <div
+              className={styles.commentActions}
+              style={disliked ? { marginTop: '0' } : {}}
+            >
+              {disliked ? (
+                <></>
+              ) : (
+                <>
+                  <CommentActionItem
+                    icon={<IconWrapper icon={<ReplyStrokedSVG />} />}
+                    text="回复"
+                  />
+                  <CommentActionItem
+                    icon={<IconWrapper icon={<ShareStrokedSVG />} />}
+                    text="分享"
+                  />
+                </>
+              )}
+
               {liked ? (
                 <CommentActionItem
                   icon={
-                    <IconLikeHeart
+                    <IconWrapper
+                      icon={<HeartSVG />}
                       style={{
-                        color: '#fe2c55',
                         animation: 'bounce-scale .3s ease ',
                         transformOrigin: '8px 16px',
                       }}
@@ -210,13 +252,22 @@ function CommentCard({
                 />
               ) : (
                 <CommentActionItem
-                  icon={<IconHeartStroked />}
+                  icon={<IconWrapper icon={<HeartStrokedSVG />} />}
                   text={comment.like_count.toString()}
                   onClick={() => setLiked(!liked)}
                 />
               )}
-
-              <CommentActionItem icon={<IconDislikeThumb />} text="" />
+              {disliked ? (
+                <CommentActionItem
+                  icon={<IconWrapper icon={<BrokenHeartSVG />} />}
+                  onClick={() => setDisliked(!disliked)}
+                />
+              ) : (
+                <CommentActionItem
+                  icon={<IconWrapper icon={<BrokenHeartStrokedSVG />} />}
+                  onClick={() => setDisliked(!disliked)}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -321,9 +372,13 @@ export default function CommentSection({ videoId }: { videoId: string }) {
           onChange={handleCommentTextChange}
           suffix={
             <>
-              <SendCommentActionItem icon={<IconImage />} />
-              <SendCommentActionItem icon={<IconAt />} />
-              <SendCommentActionItem icon={<IconEmoji />} />
+              <SendCommentActionItem
+                icon={<IconWrapper icon={<PictureStrokedSVG />} />}
+              />
+              <SendCommentActionItem icon={<IconWrapper icon={<AtSVG />} />} />
+              <SendCommentActionItem
+                icon={<IconWrapper icon={<EmojiStrokedSVG />} />}
+              />
               {commentText ? (
                 <Button
                   type="primary"
