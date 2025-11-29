@@ -70,46 +70,66 @@ function SecondaryCommentList({
   secondaryComments: CommentItem[];
 }) {
   const [expanded, setExpanded] = useState(false);
-  if (!expanded) {
-    return (
-      <div className={styles.expandButtonWrapper}>
-        <div className={styles.moreCommentsLine} />
-        <Button
-          theme="borderless"
-          type="tertiary"
-          size="small"
-          className={styles.expandButton}
-          onClick={() => setExpanded(true)}
-        >
-          展开{secondaryComments.length}条回复
-          <IconChevronDownStroked size="small" style={{ marginLeft: '2px' }} />
-        </Button>
-      </div>
-    );
-  }
+  const [expandedCount, setExpandedCount] = useState(3);
+  const increment = [3, 10, 20, 50, 100];
+  const [expandedTimes, setExpandedTimes] = useState(0);
   return (
     <>
-      <div className={styles.secondaryCommentList}>
-        {secondaryComments.map(comment => (
-          <CommentCard key={comment.comment_id} comment={comment} />
-        ))}
-      </div>
+      {expanded === false ? (
+        <></>
+      ) : (
+        <div className={styles.secondaryCommentList}>
+          {secondaryComments.slice(0, expandedCount).map(comment => (
+            <CommentCard key={comment.comment_id} comment={comment} />
+          ))}
+        </div>
+      )}
       <div className={styles.expandButtonWrapper}>
-        <div className={styles.moreCommentsLine} style={{ opacity: 0 }} />
-        <Button
-          theme="borderless"
-          type="tertiary"
-          size="small"
-          className={styles.expandButton}
-          onClick={() => setExpanded(false)}
-        >
-          收起
-          <IconChevronDownStroked
+        <div className={styles.moreCommentsLine} />
+        {!expanded || expandedCount < secondaryComments.length ? (
+          <Button
+            theme="borderless"
+            type="tertiary"
             size="small"
-            style={{ marginLeft: '2px' }}
-            rotate={180}
-          />
-        </Button>
+            className={styles.expandButton}
+            onClick={() => {
+              if (expanded === true) {
+                setExpandedTimes(expandedTimes + 1);
+                setExpandedCount(
+                  expandedCount +
+                    increment[Math.min(expandedTimes, increment.length - 1)],
+                );
+              }
+              setExpanded(true);
+            }}
+          >
+            {expanded ? '展开更多' : `展开${secondaryComments.length}条回复`}
+            <IconChevronDownStroked
+              size="small"
+              style={{ marginLeft: '2px' }}
+            />
+          </Button>
+        ) : (
+          <></>
+        )}
+        {expanded && expandedCount > 0 ? (
+          <Button
+            theme="borderless"
+            type="tertiary"
+            size="small"
+            className={styles.expandButton}
+            onClick={() => setExpanded(false)}
+          >
+            收起
+            <IconChevronDownStroked
+              size="small"
+              style={{ marginLeft: '2px' }}
+              rotate={180}
+            />
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );
