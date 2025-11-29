@@ -5,6 +5,9 @@
     box-sizing: border-box;
     width: 400px;
     margin: 8px 0 4px 0;
+    ::placeholder{
+        color: var(--semi-color-text-3) !important;
+    }
 }
 .suffixSeparator{
     height: 16px;
