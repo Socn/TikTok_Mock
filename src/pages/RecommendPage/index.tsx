@@ -15,14 +15,15 @@ import { atom, useAtom } from 'jotai';
 import styles from './index.module.scss';
 import './swiper.scss';
 import { fullScreenAtom } from '@/hooks/useFullscreen';
+import { refreshFeedAtom } from '@/routes/layout';
 
 export const showCommentAtom = atom(false);
 
 export default function RecommendPage() {
   const [feedData, setFeedData] = useState<AwemeResponse | null>(null);
   const swiperRef = useRef<SwiperRef | null>(null);
-  const [disableUp, setdisableUp] = useState(true);
   const [fullscreen, setFullscreen] = useAtom(fullScreenAtom);
+  const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
 
   useEffect(() => {
     // Simulate fetching data
@@ -32,11 +33,7 @@ export default function RecommendPage() {
       console.log(data);
     }
     f();
-  }, []);
-
-  const handleSlideChange = () => {
-    setdisableUp(swiperRef.current?.swiper.isBeginning ?? true);
-  };
+  }, [refreshFeed]);
 
   return (
     <div style={{ color: 'white', width: '100%', height: '100%' }}>
@@ -65,7 +62,6 @@ export default function RecommendPage() {
         </div>
       </div>
       <Swiper
-        onSlideChange={handleSlideChange}
         modules={[Mousewheel, Navigation]}
         ref={swiperRef}
         navigation={{

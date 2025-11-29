@@ -6,6 +6,7 @@ import {
   IconGridView,
   IconHelpCircleStroked,
   IconLikeThumb,
+  IconRefresh,
   IconSetting,
   IconStar,
   IconStarStroked,
@@ -33,6 +34,7 @@ import {
 } from 'react';
 
 import useCollapsed from '@/hooks/useCollpased';
+import { refreshFeedAtom } from '@/routes/layout';
 import styles from './index.module.scss';
 
 const TikTokLogo = ({ collapsed }: { collapsed: boolean }) => {
@@ -63,10 +65,11 @@ const TikTokLogo = ({ collapsed }: { collapsed: boolean }) => {
 const sidebarItem = (
   item: {
     itemKey: string;
-    text: string;
-    icon: ReactElement;
-    selectedIcon: ReactElement;
-    nav: string;
+    text?: string;
+    icon?: ReactElement;
+    selectedIcon?: ReactElement;
+    nav?: string;
+    hoverActionButton?: ReactElement;
   },
   collapsed: boolean,
   selectedKey: string,
@@ -103,6 +106,13 @@ const sidebarItem = (
       onClick={onClick}
       style={style}
     >
+      {item.hoverActionButton && selected ? (
+        <div className={styles.sidenavHoverItemContent}>
+          {item.hoverActionButton}
+        </div>
+      ) : (
+        <></>
+      )}
       <p className={styles.sidenavItemContent}>
         {displayIcon}
         <span className={styles.sidenavItemText}>{item.text}</span>
@@ -116,6 +126,8 @@ const SidebarNav = ({
   sidebarWidth,
 }: { collapsed: boolean; sidebarWidth: number }) => {
   const navigate = useNavigate();
+
+  const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
 
   const sidenavClassname = collapsed ? styles.sidenavCollapsed : styles.sidenav;
   const itemStyle = collapsed
@@ -131,6 +143,16 @@ const SidebarNav = ({
         fontSize: '22px',
         padding: '1px',
       };
+  const RefreshButton = (
+    <IconRefresh
+      size="inherit"
+      className={styles.refreshButton}
+      onClick={e => {
+        e.stopPropagation();
+        setRefreshFeed(value => !value);
+      }}
+    />
+  );
   const items = useMemo(
     () => [
       {
@@ -139,6 +161,7 @@ const SidebarNav = ({
         icon: <IconThumbUpStroked size="large" style={itemStyle} />,
         selectedIcon: <IconLikeThumb size="large" style={itemStyle} />,
         nav: '/jingxuan',
+        hoverActionButton: RefreshButton,
       },
       {
         itemKey: 'Recommend',
@@ -146,6 +169,7 @@ const SidebarNav = ({
         icon: <IconStarStroked size="large" style={itemStyle} />,
         selectedIcon: <IconStar size="large" style={itemStyle} />,
         nav: '/?recommend=1',
+        hoverActionButton: RefreshButton,
       },
       {
         itemKey: 'AITikTok',
@@ -156,10 +180,6 @@ const SidebarNav = ({
       },
       {
         itemKey: 'separator1_uncollapsed',
-        text: '',
-        icon: <></>,
-        selectedIcon: <></>,
-        nav: '',
       },
       {
         itemKey: 'Following',
@@ -184,10 +204,6 @@ const SidebarNav = ({
       },
       {
         itemKey: 'separator2',
-        text: '',
-        icon: <></>,
-        selectedIcon: <></>,
-        nav: '',
       },
       {
         itemKey: 'Stream',
@@ -211,7 +227,7 @@ const SidebarNav = ({
         nav: '/?recommend=1',
       },
     ],
-    [itemStyle],
+    [itemStyle, RefreshButton],
   );
 
   const [selectedKey, setSelectedKey] = useState<string>(() => {
@@ -235,7 +251,7 @@ const SidebarNav = ({
         dataSource={items}
         renderItem={item =>
           sidebarItem(item, collapsed, selectedKey, () => {
-            navigate(item.nav);
+            navigate(item.nav ?? '');
             setSelectedKey(item.itemKey);
           })
         }

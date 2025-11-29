@@ -10,6 +10,8 @@ import { fullScreenAtom } from '@/hooks/useFullscreen';
 
 export const themeAtom = atom('semi-always-dark');
 
+export const refreshFeedAtom = atom(false);
+
 export default () => {
   const { Header, Sider, Content } = Layout;
   const [theme, setTheme] = useAtom(themeAtom);

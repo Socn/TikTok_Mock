@@ -2,6 +2,7 @@ import type { AwemeItem, AwemeResponse } from '@/types/feedList';
 import { mockRequest } from '@/utils/mockRequests';
 
 import VideoDataList from '@/assets/datas/videos.json';
+import { shuffleArray } from '@/utils/shuffleArray';
 
 export async function requestFeed(): Promise<AwemeResponse> {
   const response: AwemeResponse = {
@@ -24,7 +25,7 @@ export async function requestFeed(): Promise<AwemeResponse> {
     }
   }
   return await mockRequest({
-    aweme_list: uniqueDataById,
+    aweme_list: shuffleArray(uniqueDataById),
     has_more: response.has_more,
     log_pb: response.log_pb,
     status_code: response.status_code,

@@ -14,10 +14,15 @@
     font-size: 16px;
     padding: 8px 0 8px 16px;
     transition: background-color .2s ease-in, color .2s ease-in;
+    position: relative;
 
     &:hover{
       background-color: var(--semi-color-bg-2);
       color: var(--semi-color-text-0) !important;
+      .sidenavHoverItemContent{
+        opacity: 1;
+        display: block;
+      }
     }
 
     .sidenavItemContent {
@@ -28,6 +33,20 @@
       .sidenavItemText {
         height: 21px;
         vertical-align: bottom;
+      }
+    }
+
+    .sidenavHoverItemContent{
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      opacity: 0;
+      display: none;
+      .refreshButton{
+        height: 24px;
+        width: 24px;
+        font-size: 14px;
+        padding: 5px;
       }
     }
   }
@@ -52,10 +71,19 @@
     font-size: 12px;
     padding: 6px 8px;
     transition: background-color .2s ease-in, color .2s ease-in;
+    position: relative;
 
     &:hover{
       background-color: var(--semi-color-bg-2);
       color: var(--semi-color-text-0) !important;
+      &:has(.sidenavHoverItemContent){
+        .sidenavItemContent :not(.sidenavItemText){
+          opacity: 0;
+        }
+        .sidenavHoverItemContent{
+          opacity: 1;
+        }
+      }
     }
 
     .sidenavItemContent {
@@ -64,13 +92,33 @@
       flex-direction: column;
       align-items: center;
       font-weight: 500;
+      *{
+        transition: opacity .15s linear;
+      }
       .sidenavItemText {
         height: 19px;
         vertical-align: bottom;
         line-height: 19px;
       }
+
+    }
+
+    .sidenavHoverItemContent{
+      z-index: 20;
+      position: absolute;
+      right: 14px;
+      top: 6px;
+      opacity: 0;
+      transition: opacity .15s linear;
+      .refreshButton{
+        height: 24px;
+        width: 24px;
+        font-size: 22px;
+        padding: 1px;
+      }
     }
   }
+
 }
 
 
