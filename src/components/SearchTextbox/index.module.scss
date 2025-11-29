@@ -3,6 +3,8 @@
     border-radius: 12px;
     font-size: 16px !important;
     box-sizing: border-box;
+    width: 400px;
+    margin: 8px 0 4px 0;
 }
 .suffixSeparator{
     height: 16px;
@@ -11,6 +13,7 @@
     margin-right: -4px;
 }
 .textboxSuffix{
+    cursor: pointer;
     width: 80px;
     height: 40px;
     display: flex;
@@ -21,9 +24,74 @@
     justify-content: center;
     font-weight: 500 !important;
     border-radius: 0 12px 12px 0;
+    background-color: transparent;
 
     .suffixText{
         margin-left: 3px;
         font-size: 16px;
     }
+}
+
+.dropdownWrapper{
+    border-radius: 12px !important;
+    overflow: hidden;
+    background-color: rgb(37,38,49) !important;
+}
+
+.historyItemContainer{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 16px 8px 16px;
+}
+.historyItem{
+    background-color: rgba(54,55,64) !important;
+    border-radius: 6px !important;
+    padding: 0px 8px !important;
+    line-height: 24px;
+    height: 24px;
+    cursor: pointer;
+    border: none !important;
+    display: inline-block;
+    user-select: none;
+
+    &:hover{
+        background-color: rgba(94,95,103) !important;
+        .historyItemDelete{
+            display: flex;
+        }
+    }
+
+    .historyItemInner{
+        background-color: transparent !important;
+        color: var(--semi-color-text-1);
+        border: none !important;
+        padding: 0 !important;
+        font-size: 12px !important;
+    }
+}
+.historyItemDelete{
+    background-color: rgba(54,55,64) !important;
+    color: var(--semi-color-text-2);
+    font-size: 10px;
+    padding: 3px;
+    border-radius: 50%;
+    display: none;
+    &:hover{
+        color: var(--semi-color-text-0);
+    }
+}
+.clearButton{
+    color: var(--semi-color-text-2) !important;
+    background: transparent !important;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 0 !important;
+
+    &:hover{
+        color: var(--semi-color-text-1) !important;
+    }
+}
+.clearButtonContent *{
+    margin-left: 2px !important;
 }
