@@ -29,6 +29,7 @@
     "@modern-js/plugin-tailwindcss": "2.68.20",
     "@modern-js/runtime": "2.68.20",
     "approximate-number": "^2.1.1",
+    "copy-to-clipboard": "^3.3.3",
     "jotai": "^2.15.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -198,7 +198,7 @@
     overflow: scroll;
 }
 .commentTabPane{
-    height: 100%;
+    height: calc(100% - 3px);
     *[x-semi-prop="children"]{
         height: 100%;
     }

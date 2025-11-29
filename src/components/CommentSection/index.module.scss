@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: row;
   margin-top: 9px;
+  position: relative;
+
   .commentAvatarWrapper{
     box-sizing: content-box;
     min-width: fit-content;
@@ -17,8 +19,8 @@
     }
   }
   .commentContentWrapper{
+    padding: 4px 0;
     .commentContent{
-      padding: 4px 0;
       .commentUsername{
         color: var(--semi-color-text-1);
         margin-bottom: 4px;
@@ -50,6 +52,26 @@
           display: flex;
           height: 20px;
           gap: 10px;
+        }
+      }
+      .commentMenu{
+        position: absolute;
+        top: 4px;
+        right: 8px;
+        padding: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        .commentMenuIcon{
+          color: transparent;
+          &:hover{
+            color: var(--semi-color-text-0) !important;
+          }
+        }
+      }
+      &:hover{
+        .commentMenuIcon{
+          color: var(--semi-color-text-2) !important;
         }
       }
     }
@@ -105,3 +127,78 @@
     }
   }
 }
+
+.sendCommentSection{
+  margin-bottom: 16px;
+  height: 44px;
+  padding: 0 16px;
+  .sendCommentInput{
+    height: 44px;
+    border-radius: 12px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    border: none !important;
+    align-content: center;
+    &:hover{
+      outline: 1px solid rgba(255, 255, 255, .5);
+      background-color: rgba(255,255,255,.2);
+    }
+    &:global(.semi-input-wrapper-focus){
+      outline: 1px solid rgba(255, 255, 255, .5);
+
+    }
+    ::placeholder{
+      color: var(--semi-color-text-3) !important;
+    }
+    input{
+      border: none !important;
+    }
+
+    .sendCommentButton{
+      position: relative;
+      right: 10px;
+      height: 24px;
+      width: 24px;
+      margin-left: 12px;
+      border-radius: 50%;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px !important;
+      background: #FE2C55;
+      color: var(--semi-color-text-1);
+    }
+    .sendCommentActionButton{
+      position: relative;
+      right: 10px;
+      height: 24px;
+      width: 24px;
+      margin-left: 12px;
+      border-radius: 50%;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px !important;
+      background: transparent;
+      color: var(--semi-color-text-3);
+      .sendCommentActionButtonIcon{
+        color: var(--semi-color-text-3);
+        &:hover{
+          color: var(--semi-color-text-0);
+        }
+      }
+    }
+  }
+}
+
+.dropdownWrapper{
+  border-radius: 12px !important;
+  overflow: hidden;
+  background-color: rgb(37,38,49) !important;
+}
+.commentMenuItem{
+  border-radius: 8px;
+  height: 30px;
+}
+

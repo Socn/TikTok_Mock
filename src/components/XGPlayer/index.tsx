@@ -207,7 +207,7 @@ export default function XGPlayer({
         <div className={styles.commentSection}>
           <Tabs
             style={{ height: '100%' }}
-            contentStyle={{ height: 'calc(100% - 46px)' }}
+            contentStyle={{ height: 'calc(100% - 46px)', padding: '0' }}
             tabBarExtraContent={
               <Button
                 type="tertiary"

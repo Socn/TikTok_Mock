@@ -3,23 +3,40 @@ import type { CommentItem } from '@/types/comment';
 import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
 
+import { sendComments } from '@/apis/sendComments';
+import BrokenHeart from '@/assets/icons/brokenHeart.svg?react';
 import {
+  IconArrowUp,
+  IconAt,
   IconChevronDownStroked,
   IconDislikeThumb,
+  IconEmoji,
   IconHeartStroked,
+  IconImage,
+  IconImageStroked,
+  IconLikeHeart,
+  IconMore,
+  IconMoreStroked,
   IconReplyStroked,
   IconShareStroked,
 } from '@douyinfe/semi-icons';
-import { Button } from '@douyinfe/semi-ui';
+import { Button, Dropdown, Input, Toast } from '@douyinfe/semi-ui';
+import copy from 'copy-to-clipboard';
 import React from 'react';
+import IconWrapper from '../IconWrapper';
 import styles from './index.module.scss';
 
 const CommentActionItem = ({
   icon,
   text,
-}: { icon: ReactElement; text: string }) => {
+  onClick,
+}: { icon: ReactElement; text: string; onClick?: () => void }) => {
   return (
-    <button className={styles.commentActionItem} type="button">
+    <button
+      className={styles.commentActionItem}
+      type="button"
+      onClick={onClick}
+    >
       <div className={styles.commentActionIconWrapper}>
         {React.cloneElement(icon, {
           className: styles.commentActionIcon,
@@ -28,6 +45,22 @@ const CommentActionItem = ({
       </div>
       <div className={styles.commentActionText}>{text}</div>
     </button>
+  );
+};
+
+const SendCommentActionItem = ({ icon }: { icon: ReactElement }) => {
+  const real_icon = React.cloneElement(icon, {
+    className: styles.sendCommentActionButtonIcon,
+    size: 'inherit',
+  });
+  return (
+    <Button
+      type="tertiary"
+      size="small"
+      className={styles.sendCommentActionButton}
+    >
+      {real_icon}
+    </Button>
   );
 };
 
@@ -86,6 +119,20 @@ function CommentCard({
   comment,
   secondaryComments,
 }: { comment: CommentItem; secondaryComments?: CommentItem[] }) {
+  const [liked, setLiked] = useState(false);
+  const dropdownRef = React.useRef<Dropdown | null>(null);
+  const commentContentRef = React.useRef<HTMLSpanElement | null>(null);
+  const [visible, setVisible] = useState(false);
+  const handleVisibleChange = (open: boolean) => {
+    setVisible(open);
+  };
+  const handleCopyComment = () => {
+    // navigator.clipboard.writeText(comment.content);
+    setVisible(false);
+    if (copy(comment.content)) {
+      Toast.success({ content: '评论已复制到剪贴板', duration: 3 });
+    }
+  };
   return (
     <div className={styles.commentCard}>
       <div className={styles.commentAvatarWrapper}>
@@ -95,10 +142,45 @@ function CommentCard({
           alt="avatar"
         />
       </div>
+
       <div className={styles.commentContentWrapper}>
         <div className={styles.commentContent}>
+          <Dropdown
+            ref={dropdownRef}
+            onVisibleChange={handleVisibleChange}
+            visible={visible}
+            position="bottomRight"
+            className={`${styles.dropdownWrapper} semi-always-dark`}
+            spacing={0}
+            render={
+              <Dropdown.Menu style={{ padding: '8px' }}>
+                <Dropdown.Item
+                  style={{ background: 'transparent', padding: '4px' }}
+                >
+                  <Button
+                    className={styles.commentMenuItem}
+                    type="tertiary"
+                    theme="borderless"
+                    size="small"
+                    onClick={handleCopyComment}
+                  >
+                    复制评论
+                  </Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            }
+          >
+            <div className={styles.commentMenu}>
+              <IconMoreStroked
+                className={styles.commentMenuIcon}
+                style={visible ? { color: 'var(--semi-color-text-0)' } : {}}
+              />
+            </div>
+          </Dropdown>
           <div className={styles.commentUsername}>{comment.nickname}</div>
-          <div className={styles.commentText}>{comment.content}</div>
+          <div className={styles.commentText}>
+            <span ref={commentContentRef}>{comment.content}</span>
+          </div>
           <div className={styles.commentInfo}>
             <span className={styles.commentTime}>
               {new Date(comment.create_time * 1000).toLocaleDateString()}
@@ -112,18 +194,36 @@ function CommentCard({
             <div className={styles.commentActions}>
               <CommentActionItem icon={<IconReplyStroked />} text="回复" />
               <CommentActionItem icon={<IconShareStroked />} text="分享" />
-              <CommentActionItem
-                icon={<IconHeartStroked />}
-                text={comment.like_count.toString()}
-              />
+              {liked ? (
+                <CommentActionItem
+                  icon={
+                    <IconLikeHeart
+                      style={{
+                        color: '#fe2c55',
+                        animation: 'bounce-scale .3s ease ',
+                        transformOrigin: '8px 16px',
+                      }}
+                    />
+                  }
+                  text={(comment.like_count + 1).toString()}
+                  onClick={() => setLiked(!liked)}
+                />
+              ) : (
+                <CommentActionItem
+                  icon={<IconHeartStroked />}
+                  text={comment.like_count.toString()}
+                  onClick={() => setLiked(!liked)}
+                />
+              )}
+
               <CommentActionItem icon={<IconDislikeThumb />} text="" />
             </div>
           </div>
-          <div>
-            {secondaryComments && secondaryComments.length > 0 ? (
-              <SecondaryCommentList secondaryComments={secondaryComments} />
-            ) : null}
-          </div>
+        </div>
+        <div>
+          {secondaryComments && secondaryComments.length > 0 ? (
+            <SecondaryCommentList secondaryComments={secondaryComments} />
+          ) : null}
         </div>
       </div>
     </div>
@@ -147,26 +247,100 @@ export default function CommentSection({ videoId }: { videoId: string }) {
     }
     f();
   }, [videoId]);
+
+  const [commentText, setCommentText] = useState('');
+  const handleCommentTextChange = (value: string) => {
+    setCommentText(value);
+  };
+  const handleSendComment = async () => {
+    await sendComments(videoId, commentText);
+    const newComments = [
+      {
+        comment_id: `local_${Date.now().toString()}`,
+        create_time: Date.now() / 1000,
+        ip_location: '本地',
+        aweme_id: videoId,
+        content: commentText,
+        user_id: 'local_user',
+        sec_uid: 'local_sec_uid',
+        short_user_id: 'local_short_user_id',
+        user_unique_id: 'local_unique_id',
+        user_signature: null,
+        nickname: '本地用户',
+        avatar:
+          'https://p3-pc.douyinpic.com/aweme/100x100/aweme-avatar/aweme_default_avatar.png.jpeg?from=2064092626',
+        sub_comment_count: '0',
+        like_count: 0,
+        last_modify_ts: Date.now(),
+        parent_comment_id: '0',
+        pictures: '',
+      },
+      ...comments,
+    ];
+    setComments(newComments);
+    setFirstLevelComments(
+      newComments.filter(comment => comment.parent_comment_id === '0'),
+    );
+    setCommentText('');
+    console.log(newComments);
+  };
   return (
-    <div
-      style={{
-        width: '336px',
-        height: '100%',
-        overflow: 'scroll',
-      }}
-      className="swiper-no-mousewheel"
-    >
-      <div className={styles.commentList}>
-        {firstLevelComments.map(comment => (
-          <CommentCard
-            key={comment.comment_id}
-            comment={comment}
-            secondaryComments={comments.filter(
-              secondary => secondary.parent_comment_id === comment.comment_id,
-            )}
-          />
-        ))}
+    <>
+      <div
+        style={{
+          margin: '12px 0 8px 0',
+          padding: '0 16px',
+          fontSize: '12px',
+        }}
+      >{`全部评论(${comments.length})`}</div>
+      <div
+        style={{
+          width: '336px',
+          height: 'calc(100% - 60px - 38px)',
+          overflow: 'scroll',
+        }}
+        className="swiper-no-mousewheel"
+      >
+        <div className={styles.commentList}>
+          {firstLevelComments.map(comment => (
+            <CommentCard
+              key={comment.comment_id}
+              comment={comment}
+              secondaryComments={comments.filter(
+                secondary => secondary.parent_comment_id === comment.comment_id,
+              )}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+      <div className={styles.sendCommentSection}>
+        <Input
+          className={styles.sendCommentInput}
+          placeholder="留下你的精彩评论吧"
+          value={commentText}
+          onChange={handleCommentTextChange}
+          suffix={
+            <>
+              <SendCommentActionItem icon={<IconImage />} />
+              <SendCommentActionItem icon={<IconAt />} />
+              <SendCommentActionItem icon={<IconEmoji />} />
+              {commentText ? (
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={handleSendComment}
+                  className={styles.sendCommentButton}
+                >
+                  <IconArrowUp
+                    size="inherit"
+                    style={{ color: 'var(--semi-color-text-0)' }}
+                  />
+                </Button>
+              ) : null}
+            </>
+          }
+        />
+      </div>
+    </>
   );
 }
