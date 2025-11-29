@@ -1,0 +1,115 @@
+.videoPlayerContainer{
+  .xgplayer{
+    video {
+      height: calc(100% - 48px) !important;
+      z-index: 2;
+    }
+    xg-controls{
+      z-index: 13 !important;
+      height: 48px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      cursor: pointer !important;
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0.85) 100%
+        ) !important;
+      xg-inner-controls{
+        left: 0 !important;
+        right: 0 !important;
+
+        height: 46px !important;
+        align-items: center !important;
+
+        xg-left-grid{
+          margin-left: 8px;
+          opacity: .3;
+          height: 40px !important;
+        }
+        xg-center-grid{
+          top: -16px !important;
+          .xgplayer-progress{
+            xg-outer{
+              border-radius: 0 !important;
+              height: 2px !important;
+              transition: none !important;
+              xg-inner{
+                transition: none !important;
+                backgroud: rgba(255, 255, 255, .2) !important;
+                xg-cache{
+                  background: 0 0 !important;
+                }
+                xg-played{
+                  background: rgba(255,255,255,.4) !important;
+                }
+              }
+              xg-progress-btn{
+                border: .5px solid rgba(255,94,94,.055);
+                box-shadow: none !important;
+                background: 0 0 !important;
+                &::before{
+                  box-sizing: content-box;
+                  background-clip: content-box;
+                }
+              }
+            }
+            &.active{
+              .xgplayer-progress-btn{
+                border: .5px solid rgba(255,94,94,.055);
+                box-shadow: none !important;
+                background: 0 0 !important;
+                &::before{
+                  border: 5px solid rgba(255,255,255,.2);
+                }
+                &.active::before{
+                  box-shadow: none !important;
+                }
+              }
+            }
+          }
+        }
+        xg-right-grid{
+          margin-right: 8px;
+          opacity: .3;
+          height: 40px !important;
+        }
+
+        .xgplayer-icon{
+          height: 36px;
+        }
+      }
+    }
+    .xgplayer-progress-point{
+      background: rgba(0, 0, 0, 0.85) !important;
+    }
+    .xgplayer-progress.active{
+      .xgplayer-progress-outer{
+        height: 4px !important;
+        xg-inner{
+          background: rgba(255,255,255,.4) !important;
+          xg-cache{
+            background: rgba(255,255,255,.6) !important;
+          }
+          xg-played{
+            background: #fff !important;
+          }
+        }
+      }
+    }
+  }
+
+  &:hover{
+      xg-controls{
+        xg-inner-controls{
+          xg-left-grid{
+            opacity: 1;
+          }
+          xg-center-grid{
+          }
+          xg-right-grid{
+            opacity: 1;
+          }
+        }
+      }
+    }
+}

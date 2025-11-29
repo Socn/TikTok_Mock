@@ -1,0 +1,7 @@
+.swiper-button-disabled {
+  color: var(--semi-color-text-3) !important;
+  cursor: not-allowed !important;
+  &:hover{
+    color: var(--semi-color-text-3) !important;
+  }
+}

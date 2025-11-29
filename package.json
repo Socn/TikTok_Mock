@@ -28,11 +28,13 @@
     "@douyinfe/semi-ui": "^2.88.3",
     "@modern-js/plugin-tailwindcss": "2.68.20",
     "@modern-js/runtime": "2.68.20",
+    "approximate-number": "^2.1.1",
     "jotai": "^2.15.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "swiper": "^12.0.3",
-    "xgplayer": "^3.0.23"
+    "xgplayer": "^3.0.23",
+    "xgplayer-mp4": "^3.0.23"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

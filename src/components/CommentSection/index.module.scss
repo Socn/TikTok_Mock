@@ -1,0 +1,107 @@
+.commentCard{
+  display: flex;
+  flex-direction: row;
+  margin-top: 9px;
+  .commentAvatarWrapper{
+    box-sizing: content-box;
+    min-width: fit-content;
+    margin-right: 8px;
+    .commentAvatar{
+      border: 1px solid transparent;
+      box-sizing: content-box;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+  }
+  .commentContentWrapper{
+    .commentContent{
+      padding: 4px 0;
+      .commentUsername{
+        color: var(--semi-color-text-1);
+        margin-bottom: 4px;
+        height: 22px;
+        font-size: 12px;
+        line-height: 20px;
+        font-weight: 400;
+        align-content: center;
+      }
+      .commentText{
+        font-size: 13px;
+        line-height: 22px;
+
+      }
+      .commentInfo{
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--semi-color-text-2);
+        line-height: 20px;
+      }
+      .commentActionsWrapper{
+        .commentActions{
+          margin-top: 11px;
+          color: var(--semi-color-text-2);
+          align-items: center;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 20px;
+          display: flex;
+          height: 20px;
+          gap: 10px;
+        }
+      }
+    }
+
+  }
+}
+
+.commentList{
+  padding: 0 16px;
+  width: 100%;
+}
+.secondaryCommentList{
+  .commentAvatar{
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+.expandButtonWrapper{
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.moreCommentsLine{
+  width: 26px;
+  height: 1px;
+  background-color: rgba(255,255,255,.2);
+}
+.expandButton{
+  background: transparent !important;
+  opacity: .34;
+  cursor: pointer;
+  font-size: 12px !important;
+  padding: 0 8px !important;
+  font-weight: 400 !important;
+  &:hover{
+    opacity: .9;
+  }
+}
+
+.commentActionItem{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  .commentActionIconWrapper{
+    height: 20px;
+    width: 20px;
+    padding: 2px;
+    .commentActionIcon{
+      font-size: 16px;
+    }
+  }
+}

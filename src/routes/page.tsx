@@ -1,3 +1,4 @@
+import RecommendPage from '@/pages/RecommendPage';
 import { useLocation, useNavigate } from '@modern-js/runtime/router';
 import { useEffect } from 'react';
 
@@ -16,12 +17,7 @@ function Index() {
   if (isRecommendPage !== '1') {
     return <></>; // Prevent rendering before redirect
   }
-  return (
-    <div className="recommend-page">
-      <h1>Welcome to the Recommend Page!</h1>
-      <p>This page is tailored just for you.</p>
-    </div>
-  );
+  return <RecommendPage />;
 }
 
 export default Index;
