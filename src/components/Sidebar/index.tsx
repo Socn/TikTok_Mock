@@ -22,8 +22,8 @@ import {
 import { List } from '@douyinfe/semi-ui';
 import { useAtom } from 'jotai';
 
-import TikTokLogoSmallSvg from '@/assets/icons/tiktok-logo-small.svg?react';
-import TikTokLogoSvg from '@/assets/icons/tiktok-logo.svg?react';
+import TikTokLogoSmallSvg from '@/assets/logos/tiktok-logo-small.svg?react';
+import TikTokLogoSvg from '@/assets/logos/tiktok-logo.svg?react';
 import { Link, useNavigate } from '@modern-js/runtime/router';
 import {
   ChangeEvent,
