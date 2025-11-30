@@ -65,44 +65,42 @@ export function HeaderMenu() {
     ? [...allItems.slice(allItems.length - 4, allItems.length)]
     : allItems;
   const moreItems = allItems.slice(0, allItems.length - 4);
+  const moreButton = collapsed ? (
+    <Dropdown
+      position="bottom"
+      className="semi-always-dark"
+      render={
+        <Dropdown.Menu style={{ height: 'max-content' }}>
+          <List
+            className={styles.headerMenu}
+            dataSource={moreItems}
+            layout="vertical"
+            style={{ height: 'max-content' }}
+            renderItem={item => (
+              <List.Item key={item.key} style={{ border: 'none', padding: 0 }}>
+                <Dropdown.Item key={item.key}>{item.text}</Dropdown.Item>
+              </List.Item>
+            )}
+          />
+        </Dropdown.Menu>
+      }
+    >
+      <div>
+        <MenuItem
+          item={{
+            key: 'more',
+            text: '更多',
+            icon: <IconMore />,
+          }}
+        />
+      </div>
+    </Dropdown>
+  ) : (
+    <></>
+  );
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      {collapsed ? (
-        <Dropdown
-          position="bottom"
-          className="semi-always-dark"
-          render={
-            <Dropdown.Menu style={{ height: 'max-content' }}>
-              <List
-                className={styles.headerMenu}
-                dataSource={moreItems}
-                layout="vertical"
-                style={{ height: 'max-content' }}
-                renderItem={item => (
-                  <List.Item
-                    key={item.key}
-                    style={{ border: 'none', padding: 0 }}
-                  >
-                    <Dropdown.Item key={item.key}>{item.text}</Dropdown.Item>
-                  </List.Item>
-                )}
-              />
-            </Dropdown.Menu>
-          }
-        >
-          <div>
-            <MenuItem
-              item={{
-                key: 'more',
-                text: '更多',
-                icon: <IconMore />,
-              }}
-            />
-          </div>
-        </Dropdown>
-      ) : (
-        <></>
-      )}
+      {moreButton}
       <List
         className={styles.headerMenu}
         dataSource={items}

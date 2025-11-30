@@ -8,18 +8,13 @@ import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/mousewheel';
 import 'swiper/css/navigation';
-import {
-  IconArrowDown,
-  IconArrowUp,
-  IconChevronDown,
-  IconChevronUp,
-} from '@douyinfe/semi-icons';
+import { IconChevronDown, IconChevronUp } from '@douyinfe/semi-icons';
 import { Button } from '@douyinfe/semi-ui';
 import { atom, useAtom } from 'jotai';
 
 import styles from './index.module.scss';
 import './swiper.scss';
-import { fullScreenAtom, useFullscreen } from '@/hooks/useFullscreen';
+import { useFullscreen } from '@/hooks/useFullscreen';
 import { refreshFeedAtom } from '@/routes/layout';
 
 export const showCommentAtom = atom(false);
@@ -96,7 +91,7 @@ export default function RecommendPage() {
                       isNext={isNext}
                       isPrev={isPrev}
                       key={item.aweme_id}
-                      onCloseBtnClick={()=>toggleFullscreen(document.body)}
+                      onCloseBtnClick={() => toggleFullscreen(document.body)}
                     />
                   </>
                 )}

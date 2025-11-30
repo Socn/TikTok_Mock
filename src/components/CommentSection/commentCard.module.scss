@@ -1,0 +1,110 @@
+.commentCard{
+  display: flex;
+  flex-direction: row;
+  margin-top: 9px;
+  position: relative;
+
+  &:nth-child(1){
+    margin-top: 0;
+  }
+
+  .commentAvatarWrapper{
+    box-sizing: content-box;
+    min-width: fit-content;
+    margin-right: 8px;
+    .commentAvatar{
+      border: 1px solid transparent;
+      box-sizing: content-box;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+  }
+  .commentContentWrapper{
+    padding: 4px 0;
+    width: 100%;
+    .commentContent{
+      .commentUsername{
+        color: var(--semi-color-text-1);
+        margin-bottom: 4px;
+        height: 22px;
+        font-size: 12px;
+        line-height: 20px;
+        font-weight: 400;
+        align-content: center;
+      }
+      .commentText{
+        font-size: 13px;
+        line-height: 22px;
+
+      }
+      .commentInfo{
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--semi-color-text-2);
+        line-height: 20px;
+      }
+      .commentActionsWrapper{
+        .commentActions{
+          margin-top: 11px;
+          color: var(--semi-color-text-2);
+          align-items: center;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 20px;
+          display: flex;
+          height: 20px;
+          gap: 10px;
+        }
+      }
+      .commentMenu{
+        position: absolute;
+        top: 4px;
+        right: 8px;
+        padding: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        .commentMenuIcon{
+          color: transparent;
+          &:hover{
+            color: var(--semi-color-text-0) !important;
+          }
+        }
+      }
+      &:hover{
+        .commentMenuIcon{
+          color: var(--semi-color-text-2) !important;
+        }
+      }
+    }
+
+  }
+}
+
+.commentActionItem{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  .commentActionIconWrapper{
+    height: 20px;
+    width: 20px;
+    padding: 2px;
+    .commentActionIcon{
+      font-size: 16px;
+    }
+  }
+}
+
+.dropdownWrapper{
+  border-radius: 12px !important;
+  overflow: hidden;
+  background-color: rgb(37,38,49) !important;
+}
+.commentMenuItem{
+  border-radius: 8px;
+  height: 30px;
+}

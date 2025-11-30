@@ -1,14 +1,25 @@
+import { useFullscreen } from '@/hooks/useFullscreen';
 import type { AwemeItem } from '@/types/feedList';
+import chineseFormatDistanceToNow from '@/utils/chineseFormatDistanceToNow';
+import { atom, useAtom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 import React, { type ReactElement, useEffect } from 'react';
+
 import Mp4Plugin from 'xgplayer-mp4';
 import ZH from 'xgplayer/es/lang/zh-cn';
 import Player, { Events, I18N } from 'xgplayer/es/player';
 import DefaultPreset from 'xgplayer/es/presets/default-en';
 import 'xgplayer/dist/index.min.css';
 import 'xgplayer/es/plugins/danmu/index.css';
+import { Danmu } from 'xgplayer';
+
 import './index.player.scss';
-import { fullScreenAtom, useFullscreen } from '@/hooks/useFullscreen';
-import { showCommentAtom } from '@/pages/RecommendPage';
+import EmojiStrokedSVG from '@/assets/icons/emojiStroked.svg?react';
+import ExitFullscreenSVG from '@/assets/icons/exitFullscreen.svg';
+import FullscreenSVG from '@/assets/icons/fullscreen.svg';
+import MuteSVG from '@/assets/icons/mute.svg';
+import VolumeHighSVG from '@/assets/icons/volumeHigh.svg';
+import VolumeLowSVG from '@/assets/icons/volumeLow.svg';
 import {
   IconClose,
   IconComment,
@@ -20,21 +31,12 @@ import {
   IconStar,
 } from '@douyinfe/semi-icons';
 import { Button, Input, TabPane, Tabs, Tooltip } from '@douyinfe/semi-ui';
-import { atom, useAtom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
-
-import CommentSection from '../CommentSection';
-import styles from './index.module.scss';
-
-import EmojiStrokedSVG from '@/assets/icons/emojiStroked.svg?react';
-import ExitFullscreenSVG from '@/assets/icons/exitFullscreen.svg';
-import FullscreenSVG from '@/assets/icons/fullscreen.svg';
-import MuteSVG from '@/assets/icons/mute.svg';
-import VolumeHighSVG from '@/assets/icons/volumeHigh.svg';
-import VolumeLowSVG from '@/assets/icons/volumeLow.svg';
-import chineseFormatDistanceToNow from '@/utils/chineseFormatDistanceToNow';
-import { Danmu, Progress } from 'xgplayer';
 import IconWrapper from '../IconWrapper';
+
+import { showCommentAtom } from '@/pages/RecommendPage';
+import CommentSection from '../CommentSection';
+
+import styles from './index.module.scss';
 
 const approx = require('approximate-number');
 const playbackRateAtom = atom(1.0);
@@ -47,9 +49,14 @@ const ActionItem = ({
   text,
   tooltipText,
   onClick,
-}: { icon: ReactElement; text: string; tooltipText: string;onClick?: () => void }) => {
+}: {
+  icon: ReactElement;
+  text: string;
+  tooltipText: string;
+  onClick?: () => void;
+}) => {
   return (
-    <Tooltip position='left' content={tooltipText}>
+    <Tooltip position="left" content={tooltipText}>
       <button className={styles.actionItem} onClick={onClick} type="button">
         <div className={styles.actionIconWrapper}>
           {React.cloneElement(icon, {
@@ -60,7 +67,6 @@ const ActionItem = ({
         <div className={styles.actionCount}>{text}</div>
       </button>
     </Tooltip>
-
   );
 };
 
@@ -73,7 +79,7 @@ const VideoPlayer = ({
   isActive: boolean;
   isVisible: boolean;
 }) => {
-  const [ isFullscreen, toggleFullscreen, toggleCssFullscreen ] = useFullscreen();
+  const [isFullscreen, toggleFullscreen, toggleCssFullscreen] = useFullscreen();
   const playerRef = React.useRef<HTMLDivElement | null>(null);
   const [playbackRate, setPlaybackRate] = useAtom(playbackRateAtom);
   const [volume, setVolume] = useAtom(volumeAtom);
@@ -85,59 +91,58 @@ const VideoPlayer = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (video !== null && video !== undefined) {
-
-        const newPlayer = new Player({
-          lang: 'zh',
-          id: video.aweme_id,
-          url: 'https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4',
-          height: '100%',
-          width: '100%',
-          volume: {
-            default: volume,
-            showValueLabel: true,
+      const newPlayer = new Player({
+        lang: 'zh',
+        id: video.aweme_id,
+        url: 'https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4',
+        height: '100%',
+        width: '100%',
+        volume: {
+          default: volume,
+          showValueLabel: true,
+        },
+        presets: [DefaultPreset],
+        plugins: [Mp4Plugin, Danmu],
+        ignores: ['cssFullscreen'],
+        mp4plugin: {
+          maxBufferLength: 50,
+          minBufferLength: 10,
+        },
+        progress: {
+          isDraggingSeek: true,
+          isPauseMoving: false,
+          isCloseClickSeek: false,
+        },
+        fullscreen: {
+          switchCallback: () => {
+            toggleFullscreen(document.body);
           },
-          presets: [DefaultPreset],
-          plugins: [Mp4Plugin, Danmu],
-          ignores: ['cssFullscreen'],
-          mp4plugin: {
-            maxBufferLength: 50,
-            minBufferLength: 10,
-          },
-          progress: {
-            isDraggingSeek: true,
-            isPauseMoving: false,
-            isCloseClickSeek: false,
-          },
-          fullscreen: {
-            switchCallback: () => {
-              toggleFullscreen(document.body);
-            },
-          },
-          icons: {
-            fullscreen: FullscreenSVG,
-            exitFullscreen: ExitFullscreenSVG,
-            volumeMuted: MuteSVG,
-            volumeSmall: VolumeLowSVG,
-            volumeLarge: VolumeHighSVG,
-          },
-          playbackRate: {
-            list: ['0.75', '1.0', '1.25', '1.5', '1.75', '2.0', '3.0'].map(
-              item => ({
-                text: `${item}x`,
-                rate: Number.parseFloat(item),
-                iconText: `${item}x`,
-              }),
-            ),
-          },
-        });
-        setPlayer(newPlayer);
+        },
+        icons: {
+          fullscreen: FullscreenSVG,
+          exitFullscreen: ExitFullscreenSVG,
+          volumeMuted: MuteSVG,
+          volumeSmall: VolumeLowSVG,
+          volumeLarge: VolumeHighSVG,
+        },
+        playbackRate: {
+          list: ['0.75', '1.0', '1.25', '1.5', '1.75', '2.0', '3.0'].map(
+            item => ({
+              text: `${item}x`,
+              rate: Number.parseFloat(item),
+              iconText: `${item}x`,
+            }),
+          ),
+        },
+      });
+      setPlayer(newPlayer);
     }
   }, [video]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (isActive && player !== undefined && player !== null) {
-      if ((player.state === 4 || player.state === 6)) {
+      if (player.state === 4 || player.state === 6) {
         player.replay();
       } else {
         try {
@@ -330,11 +335,19 @@ export default function XGPlayer({
         }}
         className="videoPlayerContainer"
       >
-        {fullScreen ? (<Button onClick={onCloseBtnClick} size='large'
-         theme='borderless'
-         type='tertiary'
-         className={styles.largeCloseButton}
-          ><IconClose size='extra-large' /></Button>) : (<></>)}
+        {fullScreen ? (
+          <Button
+            onClick={onCloseBtnClick}
+            size="large"
+            theme="borderless"
+            type="tertiary"
+            className={styles.largeCloseButton}
+          >
+            <IconClose size="extra-large" />
+          </Button>
+        ) : (
+          <></>
+        )}
         <div className={styles.overlay}>
           <div className={styles.bottomFade} />
           <div
@@ -378,42 +391,68 @@ export default function XGPlayer({
                 alt="avatar"
                 className={styles.avatarImg}
               />
-              <Button className={styles.followBtn} size="small" type='tertiary'>
+              <Button className={styles.followBtn} size="small" type="tertiary">
                 <IconPlus size="inherit" />
               </Button>
             </div>
             <ActionItem
-              icon={liked ? <IconLikeHeart style={{color: '#fe2c55', animation: 'likeActionAnim .5s ease'}}/> : <IconLikeHeart />}
-              text={approx(videoInfo?.liked_count??0 + (liked ? 1 : 0))}
-              onClick={()=>setLiked(!liked)}
-              tooltipText='点赞'
+              icon={
+                liked ? (
+                  <IconLikeHeart
+                    style={{
+                      color: '#fe2c55',
+                      animation: 'likeActionAnim .5s ease',
+                    }}
+                  />
+                ) : (
+                  <IconLikeHeart />
+                )
+              }
+              text={approx(videoInfo?.liked_count ?? 0 + (liked ? 1 : 0))}
+              onClick={() => setLiked(!liked)}
+              tooltipText="点赞"
             />
 
             <ActionItem
               icon={<IconComment />}
               text={approx(videoInfo?.comment_count)}
               onClick={() => switchCommentSection()}
-              tooltipText='评论'
+              tooltipText="评论"
             />
 
             <ActionItem
-              icon={collected ?<IconStar style={{color: '#f5bb41', animation: 'likeActionAnim .5s ease'}}/> : <IconStar />}
-              text={approx(videoInfo?.collected_count??0 + (collected ? 1 : 0))}
-              onClick={()=>setCollected(!collected)}
-              tooltipText='收藏'
+              icon={
+                collected ? (
+                  <IconStar
+                    style={{
+                      color: '#f5bb41',
+                      animation: 'likeActionAnim .5s ease',
+                    }}
+                  />
+                ) : (
+                  <IconStar />
+                )
+              }
+              text={approx(
+                videoInfo?.collected_count ?? 0 + (collected ? 1 : 0),
+              )}
+              onClick={() => setCollected(!collected)}
+              tooltipText="收藏"
             />
 
             <ActionItem
               icon={<IconShare />}
               text={approx(videoInfo?.share_count)}
-              tooltipText='分享'
+              tooltipText="分享"
             />
 
-            <ActionItem icon={<IconPulse />} text="听抖音"
-              tooltipText='听抖音'/>
+            <ActionItem
+              icon={<IconPulse />}
+              text="听抖音"
+              tooltipText="听抖音"
+            />
 
-            <ActionItem icon={<IconMore />} text=""
-              tooltipText='更多'/>
+            <ActionItem icon={<IconMore />} text="" tooltipText="更多" />
           </div>
         </div>
 

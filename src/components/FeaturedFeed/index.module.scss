@@ -1,3 +1,11 @@
+.feedContainer{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-gap: 20px;
+  padding: 8px;
+}
 .videoTitle {
   font-size: 14px;
   line-height: 20px;
@@ -16,4 +24,51 @@
   overflow: hidden;
   width: 100%;
   color: var(--semi-color-text-2)
+}
+
+.likeCountContainer{
+  display: flex;
+  position: absolute;
+  align-items: center;
+  bottom: 6px;
+  left: 6px;
+  z-index: 12;
+  pointer-events: none;
+  font-size: 13px;
+  line-height: 21px;
+  align-content: center;
+  gap: 4px;
+}
+.videoCoverGradient{
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 11;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+.videoCover{
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 10;
+  margin-bottom: 4px;
+}
+.authorNickname{
+  max-width: calc(100% - 50px);
+  width: max-content;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.playerContainer{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  inset: 0;
+  z-index: 999;
 }

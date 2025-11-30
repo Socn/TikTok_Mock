@@ -1,15 +1,7 @@
-import { requestFeed } from '@/apis/requestFeed';
-import { refreshFeedAtom } from '@/routes/layout';
-import type { AwemeResponse } from '@/types/feedList';
-import { List, TabPane, Tabs } from '@douyinfe/semi-ui';
-import { useAtom } from 'jotai';
-import React, { Suspense, useEffect, useState } from 'react';
-
-const LazyFeaturedFeed = React.lazy(() => import('@/components/FeaturedFeed'));
+import { TabPane, Tabs } from '@douyinfe/semi-ui';
+import React from 'react';
 
 import FeaturedPageContent from '@/components/FeaturedFeed';
-import { useLocation } from '@modern-js/runtime/router';
-import LazyLoad from 'react-lazyload';
 import styles from './index.module.scss';
 
 export default function FeaturedPage() {

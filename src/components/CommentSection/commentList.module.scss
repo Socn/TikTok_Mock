@@ -1,0 +1,29 @@
+.secondaryCommentList{
+  .commentAvatar{
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+.expandButtonWrapper{
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.moreCommentsLine{
+  width: 26px;
+  height: 1px;
+  background-color: rgba(255,255,255,.2);
+}
+.expandButton{
+  background: transparent !important;
+  opacity: .34;
+  cursor: pointer;
+  font-size: 12px !important;
+  padding: 0 8px !important;
+  font-weight: 400 !important;
+  &:hover{
+    opacity: .9;
+  }
+}

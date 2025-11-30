@@ -1,9 +1,12 @@
 import { atom, useAtom } from 'jotai';
-import { useEffect } from 'react';
 
 export const fullScreenAtom = atom(false);
 export const cssFullScreenAtom = atom(false);
-export function useFullscreen() : [boolean, (ele: HTMLElement) => void, (val: boolean) => void] {
+export function useFullscreen(): [
+  boolean,
+  (ele: HTMLElement) => void,
+  (val: boolean) => void,
+] {
   const [isFullscreen, setIsFullscreen] = useAtom(fullScreenAtom);
   const [isCssFullscreen, setIsCssFullscreen] = useAtom(cssFullScreenAtom);
 
@@ -30,7 +33,7 @@ export function useFullscreen() : [boolean, (ele: HTMLElement) => void, (val: bo
   };
 
   return [
-    (isFullscreen || isCssFullscreen),
+    isFullscreen || isCssFullscreen,
     toggleFullscreen,
     toggleCssFullscreen,
   ];

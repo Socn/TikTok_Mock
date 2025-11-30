@@ -24,14 +24,8 @@ import { useAtom } from 'jotai';
 
 import TikTokLogoSmallSvg from '@/assets/logos/tiktok-logo-small.svg?react';
 import TikTokLogoSvg from '@/assets/logos/tiktok-logo.svg?react';
-import { Link, useNavigate } from '@modern-js/runtime/router';
-import {
-  ChangeEvent,
-  type ReactElement,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useNavigate } from '@modern-js/runtime/router';
+import { type ReactElement, useMemo, useState } from 'react';
 
 import useCollapsed from '@/hooks/useCollpased';
 import { refreshFeedAtom } from '@/routes/layout';
