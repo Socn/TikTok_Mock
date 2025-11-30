@@ -62,8 +62,13 @@ export default function SearchTextbox({ className }: { className?: string }) {
     setInputValue('');
   };
 
-  const onBadgeClick = (term: string) => {
+  const onBadgeClick = (
+    event: React.MouseEvent<Element, MouseEvent>,
+    term: string,
+  ) => {
     setInputValue(term);
+    event.stopPropagation();
+    addHistory(term);
   };
 
   const onBadgeDeleteClick = (term: string) => {
@@ -101,13 +106,13 @@ export default function SearchTextbox({ className }: { className?: string }) {
       count={<IconClose size="inherit" />}
       key={term}
       countClassName={styles.historyItemDelete}
-      onClick={() => onBadgeDeleteClick(term)}
+      onClick={e => onBadgeDeleteClick(term)}
       className={styles.historyItem}
     >
       <Badge
         count={term}
         countClassName={styles.historyItemInner}
-        onClick={() => onBadgeClick(term)}
+        onClick={e => onBadgeClick(e, term)}
       />
     </Badge>
   ));
