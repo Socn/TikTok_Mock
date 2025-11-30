@@ -28,6 +28,7 @@ import { useNavigate } from '@modern-js/runtime/router';
 import { type ReactElement, useMemo, useState } from 'react';
 
 import useCollapsed from '@/hooks/useCollpased';
+import { showCommentAtom } from '@/pages/RecommendPage';
 import { refreshFeedAtom } from '@/routes/layout';
 import styles from './index.module.scss';
 
@@ -122,6 +123,8 @@ const SidebarNav = ({
   const navigate = useNavigate();
 
   const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
+
+  const [showComments, setShowComments] = useAtom(showCommentAtom);
 
   const sidenavClassname = collapsed ? styles.sidenavCollapsed : styles.sidenav;
   const itemStyle = collapsed
@@ -245,6 +248,7 @@ const SidebarNav = ({
         dataSource={items}
         renderItem={item =>
           sidebarItem(item, collapsed, selectedKey, () => {
+            setShowComments(false);
             navigate(item.nav ?? '');
             setSelectedKey(item.itemKey);
           })

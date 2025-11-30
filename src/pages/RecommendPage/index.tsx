@@ -24,6 +24,7 @@ export default function RecommendPage() {
   const swiperRef = useRef<SwiperRef | null>(null);
   const [fullscreen, toggleFullscreen] = useFullscreen();
   const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
+  const [showComments, setShowComments] = useAtom(showCommentAtom);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -35,6 +36,11 @@ export default function RecommendPage() {
     }
     f();
   }, [refreshFeed]);
+
+  // set showComments to false when switching pages
+  useEffect(() => {
+    setShowComments(false);
+  }, [setShowComments]);
 
   return (
     <div style={{ color: 'white', width: '100%', height: '100%' }}>

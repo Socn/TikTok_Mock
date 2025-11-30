@@ -9,6 +9,7 @@ import IconWrapper from '@/components/IconWrapper';
 import styles from './index.module.scss';
 
 import { useFullscreen } from '@/hooks/useFullscreen';
+import { showCommentAtom } from '@/pages/RecommendPage';
 import chineseFormatDistanceToNow from '@/utils/chineseFormatDistanceToNow';
 import { useLocation, useNavigate } from '@modern-js/runtime/router';
 import XGPlayer from '../XGPlayer';
@@ -52,6 +53,7 @@ export default function FeaturedPageContent() {
   const [feedData, setFeedData] = useState<AwemeResponse | null>(null);
   const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
   const [isFullscreen, toggleFullscreen, toggleCssFullscreen] = useFullscreen();
+  const [showComments, setShowComments] = useAtom(showCommentAtom);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -90,7 +92,10 @@ export default function FeaturedPageContent() {
             }
             isActive={true}
             isVisible={true}
-            onCloseBtnClick={() => navigate(-1)}
+            onCloseBtnClick={() => {
+              navigate(-1);
+              setShowComments(false);
+            }}
           />
         </div>
       ) : (
