@@ -42,7 +42,7 @@ pnpm run build
 
 ## 项目说明
 
-![演示视频](https://github.com/Socn/TikTok_Mock/演示.mp4)
+演示视频：仓库根目录下的 `演示.mp4`
 
 ### 关于视频播放
 
