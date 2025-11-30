@@ -24,6 +24,22 @@ pnpm run build
 - 轮播组件 [Swiper](https://swiperjs.com/)
 - 播放器组件 [xgplayer](https://h5player.bytedance.com/)
 
+### 部分主要功能的具体实现
+
+ - 使用 `*.module.scss` 自定义样式，实现 UI 界面布局的复刻
+
+#### 推荐页
+
+ - 使用 `useEffect` 在页面加载时通过 `requestFeed` 获取一个随机顺序的视频列表，列表中的每个元素对应渲染一个 `XGPlayer` 播放器组件
+ - 使用 `Swiper` 实现播放器组件的滑动和轮播，并设置 `noSwipingSelector` 配置，防止播放器中的 `slider` 类元素无法拖动；给评论区的元素设置 `className='swiper-no-mousewhell'`，防止评论区无法滚动
+ - 使用 `SwiperSlide` 提供的 `isActive` 状态，实现播放器组件的自动播放 / 暂停
+
+#### 播放器
+
+ - 使用 `xgplayer` 自带的 `Keyboard` `Controls` `Danmu` `Fullscreen` `PlaybackRate` `Volume` 插件实现了绝大部分功能
+ - 使用自定义 Hook `useFullscreen` 和 `jotai` 提供的全局状态 `fullscreenAtom`，实现了播放器布局和网页整体布局的联动，实现了网页全屏和全屏功能
+ - 使用 `jotai` 提供的带 `localStorage` 的全局状态，实现了播放速度和音量的同步修改，以及音量的持久化存储
+
 ## 项目说明
 
 ### 关于视频播放
@@ -42,6 +58,7 @@ pnpm run build
   - 播放 / 暂停
     - 点击视频 或 按下空格可以暂停/播放
     - 拖拽进度条可调整视频播放进度
+    - 上下切换视频时自动播放 / 暂停
   - 进度条
     - 支持鼠标悬停、点击、拖拽任意位置跳转
     - 进度条缓冲条、已播放条、高亮球完全对齐抖音样式
@@ -133,3 +150,8 @@ src
 从抖音官网获取部分 SVG 图标文件，存放在 `src/assets/icons` 目录下
 
 从抖音官网获取抖音 Logo 图像文件，存放在 `src/assets/logos` 目录下
+
+
+## 个人心得
+
+通过参加字节的前端训练营，我学习了许多 React 相关的知识，这些是我以前自己摸索时不曾收获的。通过使用新的现代化的技术栈重制抖音网页，我得以一窥生态完整、高效现代化的 React 技术栈对开发效率的提升。此次训练营作业对我来说是一次有趣的挑战，而我已经尽我所能地在有限的时间里将它完善，这带给我的成就感是无与伦比的。
