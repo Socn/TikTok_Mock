@@ -10,6 +10,11 @@
   flex-direction: column;
   align-items: center;
   color: var(--semi-color-text-1);
+  opacity: .8;
+  &:hover{
+    opacity: 1;
+    color: var(--semi-color-text-0)
+  }
   .menuItemIcon{
     align-items: center;
     justify-items: center;
@@ -26,19 +31,20 @@
 }
 
 .avatarContainer{
-  width: 50px;
+  width: 52px;
   height: 44px;
   align-items: center;
   display: flex;
   justify-content: end;
 }
 .avatar{
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: var(--semi-color-bg-3);
-  font-size: 10px;
-  line-height: 32px;
+  background-color: #fe2c55;
+  font-size: 12px;
+  line-height: 36px;
+  font-weight: 600;
   text-align: center;
   border: 1px solid transparent
 }

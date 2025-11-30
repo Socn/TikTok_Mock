@@ -8,15 +8,19 @@ import {
   IconMore,
   IconUpload,
 } from '@douyinfe/semi-icons';
-import { List } from '@douyinfe/semi-ui';
-import type { ReactElement } from 'react';
+import { Dropdown, List } from '@douyinfe/semi-ui';
+import type { ReactElement, Ref } from 'react';
 import styles from './index.module.scss';
 
 const MenuItem = ({
   item,
-}: { item: { key: string; text: string; icon: ReactElement } }) => {
+  ref,
+}: {
+  item: { key: string; text: string; icon: ReactElement };
+  ref?: Ref<HTMLDivElement>;
+}) => {
   return (
-    <div className={styles.menuItem}>
+    <div className={styles.menuItem} ref={ref}>
       <div className={styles.menuItemIcon}>{item.icon}</div>
       <span className={styles.menuItemText}>{item.text}</span>
     </div>
@@ -58,29 +62,59 @@ export function HeaderMenu() {
     },
   ];
   const items = collapsed
-    ? [
-        {
-          key: 'more',
-          text: '更多',
-          icon: <IconMore />,
-        },
-        ...allItems.slice(allItems.length - 4, allItems.length),
-      ]
+    ? [...allItems.slice(allItems.length - 4, allItems.length)]
     : allItems;
+  const moreItems = allItems.slice(0, allItems.length - 4);
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
+      {collapsed ? (
+        <Dropdown
+          position="bottom"
+          className="semi-always-dark"
+          render={
+            <Dropdown.Menu style={{ height: 'max-content' }}>
+              <List
+                className={styles.headerMenu}
+                dataSource={moreItems}
+                layout="vertical"
+                style={{ height: 'max-content' }}
+                renderItem={item => (
+                  <List.Item
+                    key={item.key}
+                    style={{ border: 'none', padding: 0 }}
+                  >
+                    <Dropdown.Item key={item.key}>{item.text}</Dropdown.Item>
+                  </List.Item>
+                )}
+              />
+            </Dropdown.Menu>
+          }
+        >
+          <div>
+            <MenuItem
+              item={{
+                key: 'more',
+                text: '更多',
+                icon: <IconMore />,
+              }}
+            />
+          </div>
+        </Dropdown>
+      ) : (
+        <></>
+      )}
       <List
         className={styles.headerMenu}
         dataSource={items}
         layout="horizontal"
         renderItem={item => (
           <List.Item key={item.key} style={{ border: 'none', padding: 0 }}>
-            <MenuItem item={item} />
+            <MenuItem item={item} key={item.key} />
           </List.Item>
         )}
       />
       <div className={styles.avatarContainer}>
-        <div className={styles.avatar}>Login</div>
+        <div className={styles.avatar}>登录</div>
       </div>
     </div>
   );
