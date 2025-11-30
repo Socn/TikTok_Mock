@@ -275,6 +275,9 @@ export default function XGPlayer({
   const [showComments, setShowComments] = useAtom(showCommentAtom);
   const [loaded, setLoaded] = React.useState(isActive || isVisible);
   const [fullScreen, setFullScreen] = useAtom(fullScreenAtom);
+  const videoDescRef = React.useRef<HTMLDivElement | null>(null);
+  const [expandDesc, setExpandDesc] = React.useState(false);
+  const [showExpandButton, setShowExpandButton] = React.useState(false);
 
   useEffect(() => {
     if ((isActive || isVisible) && !loaded) {
@@ -282,9 +285,19 @@ export default function XGPlayer({
     }
   }, [isActive, isVisible, loaded]);
 
+  useEffect(() => {
+    if (videoDescRef.current) {
+      const descElement = videoDescRef.current;
+      if ((videoDescRef.current?.clientHeight ?? 0) > 90) {
+        setShowExpandButton(true);
+      }
+    }
+  }, []);
+
   const switchCommentSection = () => {
     console.log('Switch Comment Section');
     setShowComments(!showComments);
+    setExpandDesc(false);
   };
   return (
     <div
@@ -303,7 +316,7 @@ export default function XGPlayer({
           position: 'relative',
           height: '100%',
           transition: 'width 0.2s ease-out',
-          ...(showComments
+          ...(showComments || expandDesc
             ? { width: 'calc(100% - 336px)' }
             : { width: '100%' }),
         }}
@@ -311,7 +324,10 @@ export default function XGPlayer({
       >
         <div className={styles.overlay}>
           <div className={styles.bottomFade} />
-          <div className={styles.videoInfo}>
+          <div
+            className={styles.videoInfo}
+            style={expandDesc ? { display: 'none' } : {}}
+          >
             <div className={styles.videoAuthorAndDate}>
               @{videoInfo?.nickname}
               <div className={styles.uploadDate}>
@@ -322,6 +338,25 @@ export default function XGPlayer({
               </div>
             </div>
             <div className={styles.videoDesc}>{videoInfo?.desc}</div>
+            <div className={styles.videoDescForDetect} ref={videoDescRef}>
+              {videoInfo?.desc}
+            </div>
+            {showExpandButton ? (
+              <Button
+                size="small"
+                type="tertiary"
+                style={{
+                  position: 'absolute',
+                  bottom: '0px',
+                  left: '300px',
+                }}
+                onClick={() => setExpandDesc(true)}
+              >
+                展开
+              </Button>
+            ) : (
+              <></>
+            )}
           </div>
           <div className={styles.actionList}>
             <div className={styles.avatar}>
@@ -403,6 +438,33 @@ export default function XGPlayer({
               </div>
             </TabPane>
           </Tabs>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {expandDesc ? (
+        <div className={styles.commentSection}>
+          <div className={styles.videoInfoExpanded}>
+            <div className={styles.videoAuthorAndDate}>
+              @{videoInfo?.nickname}
+              <div className={styles.uploadDate}>
+                ·{' '}
+                {new Date(
+                  (videoInfo?.create_time ?? 0) * 1000,
+                ).toLocaleDateString()}
+              </div>
+            </div>
+            <div className={styles.videoDesc}>{videoInfo?.desc}</div>
+          </div>
+          <Button
+            type="tertiary"
+            theme="borderless"
+            className={styles.closeExpandedDescButton}
+            onClick={() => setExpandDesc(false)}
+          >
+            <IconClose size="large" />
+          </Button>
         </div>
       ) : (
         <></>
