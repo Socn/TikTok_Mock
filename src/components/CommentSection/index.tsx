@@ -25,6 +25,7 @@ import copy from 'copy-to-clipboard';
 import React from 'react';
 import IconWrapper from '../IconWrapper';
 import styles from './index.module.scss';
+import chineseFormatDistanceToNow from '@/utils/chineseFormatDistanceToNow';
 
 const CommentActionItem = ({
   icon,
@@ -226,11 +227,10 @@ function CommentCard({
               </div>
               <div className={styles.commentInfo}>
                 <span className={styles.commentTime}>
-                  {new Date(comment.create_time * 1000).toLocaleDateString()}
+                  {chineseFormatDistanceToNow(new Date((comment.create_time ?? 0) * 1000))}
                 </span>
-                ·
                 <span className={styles.commentIPLocation}>
-                  {comment.ip_location}
+                  {comment.ip_location === '' ? '' : `·${comment.ip_location}`}
                 </span>
               </div>
             </>
