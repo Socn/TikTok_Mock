@@ -1,7 +1,7 @@
 import { requestFeed } from '@/apis/requestFeed';
 import XGPlayer from '@/components/XGPlayer';
 import type { AwemeResponse } from '@/types/feedList';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Keyboard, Mousewheel, Navigation } from 'swiper/modules';
 import { Swiper, type SwiperRef, SwiperSlide } from 'swiper/react';
@@ -54,14 +54,12 @@ export default function RecommendPage() {
           <Button
             theme="borderless"
             className={`${styles.swiperNavigationButton} swiper-navigation-up`}
-            onClick={() => swiperRef.current?.swiper.slidePrev()}
           >
             <IconChevronUp size="large" />
           </Button>
           <Button
             theme="borderless"
             className={`${styles.swiperNavigationButton} swiper-navigation-down`}
-            onClick={() => swiperRef.current?.swiper.slideNext()}
           >
             <IconChevronDown size="large" />
           </Button>
@@ -83,18 +81,23 @@ export default function RecommendPage() {
           enabled: true,
         }}
         keyboard={{ enabled: true }}
-        noSwipingSelector="xg-center-grid"
+        noSwipingSelector=".xgplayer-slider, .xgplayer-progress"
       >
         {feedData?.aweme_list.map(item => {
           if (item.aweme_type === 0)
             return (
               <SwiperSlide key={item.aweme_id}>
-                {({ isActive, isVisible }) => (
-                  <XGPlayer
-                    videoInfo={item}
-                    isActive={isActive}
-                    isVisible={isVisible}
-                  />
+                {({ isActive, isVisible, isNext, isPrev }) => (
+                  <>
+                    <XGPlayer
+                      videoInfo={item}
+                      isActive={isActive}
+                      isVisible={isVisible}
+                      isNext={isNext}
+                      isPrev={isPrev}
+                      key={item.aweme_id}
+                    />
+                  </>
                 )}
               </SwiperSlide>
             );

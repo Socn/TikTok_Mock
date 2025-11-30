@@ -72,6 +72,9 @@
           margin-right: 8px;
           opacity: .3;
           height: 40px !important;
+          xg-icon{
+            margin-right: 4px;
+          }
         }
 
         .xgplayer-icon{
@@ -112,4 +115,99 @@
         }
       }
     }
+}
+.xgplayer-playbackrate{
+  .btn-text{
+    align-content: center;
+    span{
+      background: transparent !important;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+  .xg-options-list{
+    color: #fff;
+    opacity: 1;
+    background-color: #252632;
+    padding: 10px;
+    font-size: 14px;
+    top: auto;
+    bottom: 40px;
+    border-radius: 12px !important;
+    overflow: hidden;
+    width: unset !important;
+    .option-item{
+      height: 28px;
+      width: 48px;
+      text-align: center;
+      opacity: .7;
+      font-size: 12px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      line-height: 28px;
+      border-radius: 8px;
+      padding: 0 !important;
+      &:hover{
+        background-color: rgba(94,95,103,.5) !important;
+        color: var(--semi-color-text-0) !important;
+      }
+      &:nth-child(1){
+        margin-top: 0 !important;
+      }
+      &:nth-last-child(1){
+        margin-bottom: 0 !important;
+      }
+      &.selected{
+        color: var(--semi-color-text-0) !important;
+        font-weight: 600;
+      }
+    }
+  }
+}
+.xgplayer-volume{
+  .xgplayer-slider{
+    color: #fff;
+    opacity: 1 !important;
+    background-color: #252632 !important;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 12px !important;
+    overflow: hidden;
+    width: 56px !important;
+    height: 186px !important;
+    left: -12px;
+    .xgplayer-bar{
+      inset: 32px 0 0 0;
+      margin: auto;
+      width: 4px !important;
+      height: 137px !important;
+      .xgplayer-drag{
+        max-height: unset !important;
+        &::after{
+          width: 12px !important;
+          height: 12px !important;
+          left: -4px !important;
+        }
+      }
+    }
+    .xgplayer-value-label{
+      background-color: transparent !important;
+      top: 8px;
+      bottom: auto;
+    }
+  }
+}
+
+.xgplayer-danmu{
+  z-index: 12 !important;
+  .danmu-comment{
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    text-shadow: .5px .5px 1px rgba(0, 0, 0, .7) !important;
+  }
+}
+.danmu-icon{
+  .xgplayer-icon{
+    align-content: center;
+  }
 }
