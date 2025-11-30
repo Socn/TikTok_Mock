@@ -35,6 +35,7 @@ export default function CommentSection({ videoId }: { videoId: string }) {
   const [firstLevelComments, setFirstLevelComments] = useState<CommentItem[]>(
     [],
   );
+  const commentListRef = React.useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     // Fetch comments by videoId
     async function f() {
@@ -82,7 +83,7 @@ export default function CommentSection({ videoId }: { videoId: string }) {
       newComments.filter(comment => comment.parent_comment_id === '0'),
     );
     setCommentText('');
-    console.log(newComments);
+    commentListRef.current?.scrollTo(0, 0);
   };
   return (
     <>
@@ -100,6 +101,7 @@ export default function CommentSection({ videoId }: { videoId: string }) {
           overflow: 'scroll',
         }}
         className="swiper-no-mousewheel"
+        ref={commentListRef}
       >
         <div className={styles.commentList}>
           {firstLevelComments.map(comment => (
