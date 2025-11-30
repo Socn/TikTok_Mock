@@ -42,6 +42,8 @@ pnpm run build
 
 ## 项目说明
 
+![演示视频](https://github.com/Socn/TikTok_Mock/演示.mp4)
+
 ### 关于视频播放
 
 由于无法获取抖音视频源，所有的视频链接都使用 [xgplayer](https://h5player.bytedance.com/) 网页示例中的样例视频链接代替 (https://sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-360p.mp4)
