@@ -3,7 +3,7 @@ import type { AwemeItem } from '@/types/feedList';
 import chineseFormatDistanceToNow from '@/utils/chineseFormatDistanceToNow';
 import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import React, { type ReactElement, useEffect } from 'react';
+import React, { act, type ReactElement, useEffect } from 'react';
 
 import Mp4Plugin from 'xgplayer-mp4';
 import ZH from 'xgplayer/es/lang/zh-cn';
@@ -72,11 +72,11 @@ const ActionItem = ({
 
 const VideoPlayer = ({
   video,
-  isActive,
+  isSliderActive,
   isVisible,
 }: {
   video: AwemeItem | undefined | null;
-  isActive: boolean;
+  isSliderActive: boolean;
   isVisible: boolean;
 }) => {
   const [isFullscreen, toggleFullscreen, toggleCssFullscreen] = useFullscreen();
@@ -84,9 +84,15 @@ const VideoPlayer = ({
   const [playbackRate, setPlaybackRate] = useAtom(playbackRateAtom);
   const [volume, setVolume] = useAtom(volumeAtom);
 
+  const [active, setActive] = React.useState(isSliderActive);
+
   const [player, setPlayer] = React.useState<Player | null>(null);
 
   const [danmuText, setDanmuText] = React.useState<string>('');
+
+  function getActive() {
+    return isSliderActive;
+  }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -107,6 +113,29 @@ const VideoPlayer = ({
         mp4plugin: {
           maxBufferLength: 50,
           minBufferLength: 10,
+        },
+        keyboard: {
+          enable: true,
+          disableBodyTrigger: false,
+          isIgnoreUserActive: false,
+          keyCodeMap: {
+            space: {
+              disable: false,
+              action: 'playPause',
+            },
+            up: {
+              disable: true,
+            },
+            down: {
+              disable: true,
+            },
+            left: {
+              disable: true,
+            },
+            right: {
+              disable: true,
+            },
+          },
         },
         progress: {
           isDraggingSeek: true,
@@ -141,7 +170,7 @@ const VideoPlayer = ({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (isActive && player !== undefined && player !== null) {
+    if (isSliderActive && player !== undefined && player !== null) {
       if (player.state === 4 || player.state === 6) {
         player.replay();
       } else {
@@ -155,10 +184,11 @@ const VideoPlayer = ({
         }
       }
     }
-    if (!isActive && player !== undefined && player !== null) {
+    if (!isSliderActive && player !== undefined && player !== null) {
       player.pause();
     }
     if (player !== undefined && player !== null) {
+      player.setUserActive(isSliderActive);
       player.on(Events.RATE_CHANGE, () => {
         setPlaybackRate(player.playbackRate);
       });
@@ -179,7 +209,7 @@ const VideoPlayer = ({
         volumeIconDOM.className += ' swiper-no-mousewheel';
       }
     }
-  }, [isActive, player]);
+  }, [isSliderActive, player]);
 
   useEffect(() => {
     if (player !== undefined && player !== null) {
@@ -459,7 +489,7 @@ export default function XGPlayer({
         <div>
           <VideoPlayer
             video={videoInfo}
-            isActive={isActive}
+            isSliderActive={isActive}
             isVisible={isVisible}
           />
         </div>
