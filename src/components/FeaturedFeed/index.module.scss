@@ -1,0 +1,19 @@
+.videoTitle {
+  font-size: 14px;
+  line-height: 20px;
+  height: 40px;
+  overflow: hidden;
+  width: 100%;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  margin-bottom: 4px;
+}
+.authorAndTime{
+  display: flex;
+  font-size: 11px;
+  line-height: 18px;
+  overflow: hidden;
+  width: 100%;
+  color: var(--semi-color-text-2)
+}

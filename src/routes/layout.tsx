@@ -6,7 +6,7 @@ import TikTokHeader from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 
 import './index.css';
-import { fullScreenAtom } from '@/hooks/useFullscreen';
+import { fullScreenAtom, useFullscreen } from '@/hooks/useFullscreen';
 
 export const themeAtom = atom('semi-always-dark');
 
@@ -15,7 +15,7 @@ export const refreshFeedAtom = atom(false);
 export default () => {
   const { Header, Sider, Content } = Layout;
   const [theme, setTheme] = useAtom(themeAtom);
-  const [isFullscreen, setFullscreen] = useAtom(fullScreenAtom);
+  const [isFullscreen, toggleFullscreen, toggleCssFullscreen] = useFullscreen();
 
   return (
     <Layout

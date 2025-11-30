@@ -99,22 +99,32 @@
         }
       }
     }
+    .xg-tips{
+      color: #fff;
+      opacity: 1 !important;
+      background-color: #252632 !important;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 12px !important;
+      height: 40px;
+      top: -42px;
+    }
   }
 
   &:hover{
-      xg-controls{
-        xg-inner-controls{
-          xg-left-grid{
-            opacity: 1;
-          }
-          xg-center-grid{
-          }
-          xg-right-grid{
-            opacity: 1;
-          }
+    xg-controls{
+      xg-inner-controls{
+        xg-left-grid{
+          opacity: 1;
+        }
+        xg-center-grid{
+        }
+        xg-right-grid{
+          opacity: 1;
         }
       }
     }
+  }
 }
 .xgplayer-playbackrate{
   .btn-text{
@@ -209,5 +219,25 @@
 .danmu-icon{
   .xgplayer-icon{
     align-content: center;
+  }
+}
+
+
+@keyframes likeActionAnim {
+  0%{
+    color: var(--semi-color-text-0);
+  }
+  40%{
+    color: var(--semi-color-text-0);
+    transform: scale(0);
+  }
+  41%{
+    transform: scale(0);
+  }
+  90%{
+    transform: scale(1.1);
+  }
+  100%{
+    transform: scale(1);
   }
 }

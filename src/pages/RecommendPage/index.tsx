@@ -19,7 +19,7 @@ import { atom, useAtom } from 'jotai';
 
 import styles from './index.module.scss';
 import './swiper.scss';
-import { fullScreenAtom } from '@/hooks/useFullscreen';
+import { fullScreenAtom, useFullscreen } from '@/hooks/useFullscreen';
 import { refreshFeedAtom } from '@/routes/layout';
 
 export const showCommentAtom = atom(false);
@@ -27,7 +27,7 @@ export const showCommentAtom = atom(false);
 export default function RecommendPage() {
   const [feedData, setFeedData] = useState<AwemeResponse | null>(null);
   const swiperRef = useRef<SwiperRef | null>(null);
-  const [fullscreen, setFullscreen] = useAtom(fullScreenAtom);
+  const [fullscreen, toggleFullscreen] = useFullscreen();
   const [refreshFeed, setRefreshFeed] = useAtom(refreshFeedAtom);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -96,6 +96,7 @@ export default function RecommendPage() {
                       isNext={isNext}
                       isPrev={isPrev}
                       key={item.aweme_id}
+                      onCloseBtnClick={()=>toggleFullscreen(document.body)}
                     />
                   </>
                 )}
